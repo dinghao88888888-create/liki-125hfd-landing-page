@@ -1,0 +1,112 @@
+---
+import { SITE } from "../data/site.js";
+---
+
+<section class="section inquiry-section" id="quote" aria-labelledby="quote-title">
+  <div class="container inquiry-section__grid">
+    <div class="inquiry-section__intro">
+      <p class="eyebrow">Project quote</p>
+      <h2 id="quote-title">Request a Project-Specific Quote</h2>
+      <p>
+        Send your opening size, project location, and preferred configuration.
+        We will review the requirements and recommend the right folding glass wall system.
+      </p>
+    </div>
+
+    <form
+      class="inquiry-form"
+      action={SITE.web3formsAction}
+      method="POST"
+      enctype="multipart/form-data"
+    >
+      <input type="hidden" name="access_key" value={SITE.web3formsAccessKey} />
+      <input type="hidden" name="subject" value="LIKI 125HFD Landing Page Inquiry" />
+      <input type="hidden" name="from_name" value="LIKI Systems Website" />
+      <input type="hidden" name="source" value="LIKI 125HFD Landing Page" />
+      <input type="hidden" name="redirect" value="/thank-you/" />
+
+      <div class="form-field">
+        <label for="full-name">Full Name *</label>
+        <input id="full-name" name="Full Name" type="text" autocomplete="name" required />
+      </div>
+
+      <div class="form-field">
+        <label for="work-email">Work Email *</label>
+        <input id="work-email" name="Work Email" type="email" autocomplete="email" required />
+      </div>
+
+      <div class="form-field">
+        <label for="phone-whatsapp">Phone / WhatsApp</label>
+        <input id="phone-whatsapp" name="Phone / WhatsApp" type="tel" autocomplete="tel" />
+      </div>
+
+      <div class="form-field">
+        <label for="company-name">Company Name</label>
+        <input id="company-name" name="Company Name" type="text" autocomplete="organization" />
+      </div>
+
+      <div class="form-field">
+        <label for="project-location">Project Location *</label>
+        <input id="project-location" name="Project Location" type="text" autocomplete="address-level2" required />
+      </div>
+
+      <div class="form-field">
+        <label for="project-type">Project Type *</label>
+        <select id="project-type" name="Project Type" required>
+          <option value="">Select project type</option>
+          <option>Luxury Residential</option>
+          <option>Architect / Design Firm</option>
+          <option>Builder / Contractor</option>
+          <option>Commercial / Hospitality</option>
+          <option>Developer</option>
+          <option>Other</option>
+        </select>
+      </div>
+
+      <div class="form-field">
+        <label for="opening-size">Opening Size</label>
+        <input id="opening-size" name="Opening Size" type="text" placeholder="Example: 18 ft W x 9 ft H" />
+      </div>
+
+      <div class="form-field">
+        <label for="interested-system">Interested System</label>
+        <select id="interested-system" name="Interested System">
+          <option>LIKI 125HFD Folding Glass Wall</option>
+          <option>90° Open Corner</option>
+          <option>Zero-Threshold System</option>
+          <option>Integrated Insect Screen</option>
+          <option>Not Sure Yet</option>
+        </select>
+      </div>
+
+      <div class="form-field">
+        <label for="project-stage">Project Stage</label>
+        <select id="project-stage" name="Project Stage">
+          <option>Planning</option>
+          <option>Design / Specification</option>
+          <option>Quotation</option>
+          <option>Construction Started</option>
+          <option>Urgent Replacement</option>
+        </select>
+      </div>
+
+      <div class="form-field form-field--full">
+        <label for="message-requirements">Message / Requirements</label>
+        <textarea
+          id="message-requirements"
+          name="Message / Requirements"
+          rows="6"
+          placeholder="Tell us about your opening size, drawings, performance requirements, timeline, and delivery location."
+        ></textarea>
+      </div>
+
+      <div class="form-field form-field--full">
+        <label for="plans-drawings">Upload Plans / Drawings</label>
+        <input id="plans-drawings" name="Upload Plans / Drawings" type="file" accept=".pdf,.dwg,.dxf,.jpg,.jpeg,.png" />
+        <p class="form-note">You can also email drawings directly to {SITE.email}.</p>
+      </div>
+
+      <button class="form-submit" type="submit">Request Project Quote</button>
+    </form>
+  </div>
+</section>

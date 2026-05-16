@@ -1,0 +1,225 @@
+---
+import { SITE } from "../data/site.js";
+---
+
+<div class="popup-inquiry" data-popup-inquiry hidden>
+  <div class="popup-inquiry__overlay" data-popup-close></div>
+  <section
+    class="popup-inquiry__dialog"
+    role="dialog"
+    aria-modal="true"
+    aria-labelledby="popup-inquiry-title"
+    tabindex="-1"
+  >
+    <button class="popup-inquiry__close" type="button" data-popup-close aria-label="Close inquiry popup">
+      <span aria-hidden="true">×</span>
+    </button>
+
+    <p class="eyebrow">Project review</p>
+    <h2 id="popup-inquiry-title">Planning a Folding Glass Wall Project?</h2>
+    <p class="popup-inquiry__lead">
+      Send us your opening size and project location. Our team will review your
+      requirements and recommend the right LIKI 125HFD configuration.
+    </p>
+
+    <form
+      class="popup-inquiry__form"
+      action={SITE.web3formsAction}
+      method="POST"
+      data-popup-form
+    >
+      <input type="hidden" name="access_key" value={SITE.web3formsAccessKey} />
+      <input type="hidden" name="subject" value="LIKI 125HFD Popup Inquiry" />
+      <input type="hidden" name="from_name" value="LIKI Systems Website" />
+      <input type="hidden" name="source" value="LIKI 125HFD Landing Page Popup" />
+      <input type="hidden" name="redirect" value="/thank-you/" />
+
+      <div class="popup-field">
+        <label for="popup-full-name">Full Name *</label>
+        <input id="popup-full-name" name="Full Name" type="text" autocomplete="name" required />
+      </div>
+
+      <div class="popup-field">
+        <label for="popup-work-email">Work Email *</label>
+        <input id="popup-work-email" name="Work Email" type="email" autocomplete="email" required />
+      </div>
+
+      <div class="popup-field">
+        <label for="popup-phone-whatsapp">Phone / WhatsApp</label>
+        <input id="popup-phone-whatsapp" name="Phone / WhatsApp" type="tel" autocomplete="tel" />
+      </div>
+
+      <div class="popup-field">
+        <label for="popup-project-location">Project Location *</label>
+        <input id="popup-project-location" name="Project Location" type="text" autocomplete="address-level2" required />
+      </div>
+
+      <div class="popup-field popup-field--full">
+        <label for="popup-opening-size">Opening Size</label>
+        <input id="popup-opening-size" name="Opening Size" type="text" placeholder="Example: 18 ft W x 9 ft H" />
+      </div>
+
+      <div class="popup-field popup-field--full">
+        <label for="popup-message-requirements">Message / Requirements</label>
+        <textarea
+          id="popup-message-requirements"
+          name="Message / Requirements"
+          rows="4"
+          placeholder="Tell us about your opening size, project stage, drawings, performance requirements, and delivery location."
+        ></textarea>
+      </div>
+
+      <p class="popup-inquiry__helper">You can also send drawings later by email or WhatsApp.</p>
+      <button class="popup-inquiry__submit" type="submit">Request Project Quote</button>
+    </form>
+  </section>
+</div>
+
+<script>
+  (() => {
+    const root = document.querySelector("[data-popup-inquiry]");
+    if (!root) return;
+
+    const dialog = root.querySelector(".popup-inquiry__dialog");
+    const form = root.querySelector("[data-popup-form]");
+    const closeButtons = root.querySelectorAll("[data-popup-close]");
+    const keys = {
+      closedAt: "liki_popup_closed_at",
+      submitted: "liki_popup_submitted",
+      quoteSeen: "liki_quote_section_seen"
+    };
+
+    const day = 24 * 60 * 60 * 1000;
+    const isMobile = window.matchMedia("(max-width: 768px)").matches;
+    const delay = isMobile ? 60000 : 45000;
+    const requiredScroll = isMobile ? 0.45 : 0.35;
+    let delayPassed = false;
+    let dismissedThisSession = false;
+    let shown = false;
+    let previousActiveElement = null;
+
+    const storageGet = (key) => {
+      try {
+        return window.localStorage.getItem(key);
+      } catch {
+        return null;
+      }
+    };
+
+    const storageSet = (key, value) => {
+      try {
+        window.localStorage.setItem(key, value);
+      } catch {
+        // Ignore storage failures in private browsing modes.
+      }
+    };
+
+    const closedRecently = () => {
+      const value = Number(storageGet(keys.closedAt));
+      return Number.isFinite(value) && Date.now() - value < day;
+    };
+
+    const shouldBlockPopup = () =>
+      dismissedThisSession ||
+      storageGet(keys.submitted) === "true" ||
+      storageGet(keys.quoteSeen) === "true" ||
+      closedRecently();
+
+    const scrollRatio = () => {
+      const doc = document.documentElement;
+      const scrollable = doc.scrollHeight - window.innerHeight;
+      if (scrollable <= 0) return 0;
+      return window.scrollY / scrollable;
+    };
+
+    const lockBody = () => {
+      document.body.dataset.popupScrollLock = "true";
+      document.body.style.overflow = "hidden";
+    };
+
+    const unlockBody = () => {
+      delete document.body.dataset.popupScrollLock;
+      document.body.style.overflow = "";
+    };
+
+    const openPopup = () => {
+      if (shown || shouldBlockPopup() || scrollRatio() < requiredScroll) return;
+      shown = true;
+      previousActiveElement = document.activeElement;
+      root.hidden = false;
+      root.classList.add("is-open");
+      lockBody();
+      window.setTimeout(() => {
+        const firstInput = root.querySelector("input:not([type='hidden'])");
+        if (firstInput) firstInput.focus();
+        else if (dialog) dialog.focus();
+      }, 80);
+    };
+
+    const closePopup = ({ remember = true } = {}) => {
+      if (root.hidden) return;
+      root.classList.remove("is-open");
+      root.hidden = true;
+      dismissedThisSession = true;
+      unlockBody();
+      if (remember) storageSet(keys.closedAt, String(Date.now()));
+      if (previousActiveElement && typeof previousActiveElement.focus === "function") {
+        previousActiveElement.focus();
+      }
+    };
+
+    const checkTrigger = () => {
+      if (!delayPassed || shouldBlockPopup()) return;
+      if (scrollRatio() >= requiredScroll) openPopup();
+    };
+
+    const markQuoteSeen = () => {
+      storageSet(keys.quoteSeen, "true");
+    };
+
+    if (window.location.hash === "#quote") markQuoteSeen();
+
+    document.querySelectorAll('a[href="#quote"]').forEach((link) => {
+      link.addEventListener("click", markQuoteSeen);
+    });
+
+    const quoteSection = document.getElementById("quote");
+    if (quoteSection && "IntersectionObserver" in window) {
+      const observer = new IntersectionObserver(
+        (entries) => {
+          entries.forEach((entry) => {
+            if (entry.isIntersecting) {
+              markQuoteSeen();
+              observer.disconnect();
+            }
+          });
+        },
+        { threshold: 0.18 }
+      );
+      observer.observe(quoteSection);
+    }
+
+    window.setTimeout(() => {
+      delayPassed = true;
+      checkTrigger();
+    }, delay);
+
+    window.addEventListener("scroll", checkTrigger, { passive: true });
+
+    closeButtons.forEach((button) => {
+      button.addEventListener("click", () => closePopup({ remember: true }));
+    });
+
+    document.addEventListener("keydown", (event) => {
+      if (event.key === "Escape" && root.classList.contains("is-open")) {
+        closePopup({ remember: true });
+      }
+    });
+
+    form?.addEventListener("submit", () => {
+      storageSet(keys.submitted, "true");
+      dismissedThisSession = true;
+      unlockBody();
+    });
+  })();
+</script>

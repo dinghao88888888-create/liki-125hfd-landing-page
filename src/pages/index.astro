@@ -1,0 +1,441 @@
+---
+import CTAButton from "../components/CTAButton.astro";
+import FloatingNav from "../components/FloatingNav.astro";
+import ImageBlock from "../components/ImageBlock.astro";
+import InquiryForm from "../components/InquiryForm.astro";
+import PopupInquiryForm from "../components/PopupInquiryForm.astro";
+import WhatsAppButton from "../components/WhatsAppButton.astro";
+import { faqs, images, stats } from "../data/sections.js";
+import "../styles/global.css";
+
+const title =
+  "LIKI 125HFD Custom Folding Glass Walls | Heavy-Duty Aluminum Bifold Doors";
+const description =
+  "Custom heavy-duty aluminum folding glass wall systems for North American luxury homes, architects, and builders. Large openings, 90° open corners, flush thresholds, hidden screens, and project-specific engineering support.";
+const canonical = "https://125hfd.likisystems.com/";
+
+const schema = {
+  "@context": "https://schema.org",
+  "@type": "Product",
+  name: "LIKI 125HFD Custom Heavy-Duty Aluminum Folding Glass Wall System",
+  brand: {
+    "@type": "Brand",
+    name: "LIKI Systems"
+  },
+  description,
+  category: "Custom aluminum folding glass wall system",
+  image: canonical + "images/liki-125hfd-hero-folding-glass-wall-luxury-villa.png",
+  additionalProperty: [
+    {
+      "@type": "PropertyValue",
+      name: "Maximum leaf height",
+      value: "Up to 11.5 ft (3,500 mm)"
+    },
+    {
+      "@type": "PropertyValue",
+      name: "Maximum total opening area",
+      value: "Up to 1,033 ft² (96 m²)"
+    },
+    {
+      "@type": "PropertyValue",
+      name: "Aluminum wall thickness",
+      value: "4.3 mm (0.17 in)"
+    }
+  ],
+  offers: {
+    "@type": "Offer",
+    priceSpecification: {
+      "@type": "PriceSpecification",
+      priceCurrency: "USD",
+      description: "Project-specific quotation available upon request"
+    }
+  }
+};
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>{title}</title>
+    <meta name="description" content={description} />
+    <link rel="canonical" href={canonical} />
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={canonical} />
+    <meta property="og:image" content={`${canonical}images/liki-125hfd-hero-folding-glass-wall-luxury-villa.png`} />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={title} />
+    <meta name="twitter:description" content={description} />
+    <meta name="twitter:image" content={`${canonical}images/liki-125hfd-hero-folding-glass-wall-luxury-villa.png`} />
+    <script type="application/ld+json" set:html={JSON.stringify(schema)}></script>
+  </head>
+  <body>
+    <FloatingNav />
+    <WhatsAppButton />
+    <main id="top">
+      <section class="hero" id="overview" aria-labelledby="hero-title">
+        <ImageBlock
+          className="hero__image"
+          src={images.hero.src}
+          alt={images.hero.alt}
+          width={images.hero.width}
+          height={images.hero.height}
+          loading="eager"
+        />
+        <div class="hero__overlay"></div>
+        <div class="hero__content container">
+          <p class="eyebrow">LIKI Systems 125HFD Series</p>
+          <h1 id="hero-title">Heavy-Duty Folding Glass Walls Built Around Your Opening</h1>
+          <p class="hero__lead">
+            Custom aluminum folding glass wall systems for North American luxury
+            homes, architects, and builders — with large panels, open-corner options,
+            flush thresholds, and factory-backed engineering support.
+          </p>
+          <ul class="hero-bullets">
+            <li>Custom-built to your opening size</li>
+            <li>Up to 11.5 ft (3,500 mm) leaf height</li>
+            <li>Up to 1,033 ft² (96 m²) opening area</li>
+            <li>90° open corner and hidden screen options</li>
+            <li>Project support from drawings to delivery</li>
+          </ul>
+          <div class="hero__actions">
+            <CTAButton label="Get a Project Quote" />
+            <CTAButton label="Send Your Opening Size" variant="secondary" />
+          </div>
+        </div>
+      </section>
+
+      <section class="stats-strip" aria-label="Performance proof">
+        <div class="container stats-strip__grid">
+          {stats.map((item) => (
+            <div class="stat">
+              <span>{item.label}</span>
+              <strong>{item.value}</strong>
+              <p>{item.note}</p>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      <section class="section split" aria-labelledby="problem-title">
+        <div class="container split__grid">
+          <div>
+            <p class="eyebrow">Project-specific alternative</p>
+            <h2 id="problem-title">Standard Patio Doors Were Not Designed for This Kind of Opening</h2>
+            <p>
+              Conventional patio doors and sliders work well for standard openings.
+              They are less suited to wide luxury openings, open-corner architecture,
+              coastal exposure, deep wall conditions, custom finishes, and
+              architect-driven projects.
+            </p>
+            <p>
+              LIKI 125HFD starts with the opening, then aligns the profile, hardware,
+              glass package, sill condition, finish, and shop drawing support before
+              production begins.
+            </p>
+            <ul class="check-list">
+              <li>Custom-built alternative for project-specific openings.</li>
+              <li>Architectural quality without unnecessary custom-size friction.</li>
+              <li>Drawing support before fabrication and export packaging.</li>
+            </ul>
+            <CTAButton label="Talk to an Engineer" />
+          </div>
+          <ImageBlock {...images.performance} className="image-card" />
+        </div>
+      </section>
+
+      <section class="section section--dark" id="open-living" aria-labelledby="open-living-title">
+        <div class="container">
+          <div class="section__intro">
+            <p class="eyebrow">Indoor-outdoor living</p>
+            <h2 id="open-living-title">Open the Room. Keep the Performance.</h2>
+            <p>
+              Create open-air living when the wall is folded away, then return to
+              weather-controlled comfort when it is closed. LIKI 125HFD helps connect
+              living rooms to pool terraces, kitchens to outdoor dining, and high-end
+              residential spaces to the views that define them.
+            </p>
+          </div>
+          <div class="feature-grid feature-grid--three">
+            <article>
+              <ImageBlock {...images.panoramic} className="feature-image" />
+              <h3>Pool terrace living</h3>
+              <p>Open a full living wall to daylight, air, and a wider view without heavy visual interruption.</p>
+            </article>
+            <article>
+              <ImageBlock {...images.kitchen} className="feature-image" />
+              <h3>Kitchen to outdoor dining</h3>
+              <p>Let entertaining spaces flow directly to decks, patios, and alfresco kitchens.</p>
+            </article>
+            <article>
+              <ImageBlock {...images.homeowners} className="feature-image" />
+              <h3>All-season flexibility</h3>
+              <p>Pair open-air living with project-dependent glass, sealing, drainage, and thermal requirements.</p>
+            </article>
+          </div>
+        </div>
+      </section>
+
+      <section class="section" id="features" aria-labelledby="features-title">
+        <div class="container">
+          <div class="section__intro">
+            <p class="eyebrow">Feature system</p>
+            <h2 id="features-title">Designed for the Details Architects Actually Care About</h2>
+          </div>
+          <div class="showcase-grid">
+            <article class="showcase-card showcase-card--wide">
+              <ImageBlock {...images.corner} className="showcase-card__image" />
+              <div>
+                <h3>90° Open Corner</h3>
+                <p>Remove the visual barrier at the corner and create a panoramic opening for luxury residential projects.</p>
+              </div>
+            </article>
+            <article class="showcase-card">
+              <ImageBlock {...images.threshold} className="showcase-card__image" />
+              <div>
+                <h3>Zero-Threshold Transition</h3>
+                <p>Create a cleaner indoor-outdoor transition while coordinating sill, drainage, and project conditions.</p>
+              </div>
+            </article>
+            <article class="showcase-card">
+              <ImageBlock {...images.screen} className="showcase-card__image" />
+              <div>
+                <h3>Integrated Insect Screen</h3>
+                <p>Preserve ventilation and views while adding insect protection when needed.</p>
+              </div>
+            </article>
+            <article class="showcase-card">
+              <ImageBlock {...images.access} className="showcase-card__image" />
+              <div>
+                <h3>Daily Access Door</h3>
+                <p>Use one panel for everyday access without opening the entire wall system.</p>
+              </div>
+            </article>
+            <article class="showcase-card">
+              <ImageBlock {...images.megaPanel} className="showcase-card__image" />
+              <div>
+                <h3>Architectural Mega-Panels</h3>
+                <p>Use larger panels and fewer vertical interruptions for cleaner sightlines.</p>
+              </div>
+            </article>
+          </div>
+        </div>
+      </section>
+
+      <section class="section section--warm" id="custom" aria-labelledby="custom-title">
+        <div class="container split__grid">
+          <div>
+            <p class="eyebrow">Bespoke sizing</p>
+            <h2 id="custom-title">Custom Size Is Not an Upgrade. It Is the Starting Point.</h2>
+            <p>
+              LIKI does not begin with a fixed SKU and ask the project to adapt.
+              The system is reviewed around exact opening dimensions, wall conditions,
+              desired panel count, finish, glass, sill, screen, and hardware needs.
+            </p>
+            <div class="pill-grid">
+              <span>Exact opening dimensions</span>
+              <span>RAL / NCS colors</span>
+              <span>Matte black and warm grey</span>
+              <span>Champagne and wood-grain finishes</span>
+              <span>Low-E insulated glass</span>
+              <span>Laminated or upgraded glazing</span>
+              <span>Hardware finish options</span>
+              <span>Screen and sill configurations</span>
+              <span>Shop drawing support</span>
+            </div>
+            <CTAButton label="Request Custom Drawings" />
+          </div>
+          <ImageBlock {...images.colors} className="image-card" />
+        </div>
+      </section>
+
+      <section class="section split" id="engineering" aria-labelledby="engineering-title">
+        <div class="container split__grid">
+          <ImageBlock {...images.hardware} className="image-card" />
+          <div>
+            <p class="eyebrow">Engineering trust</p>
+            <h2 id="engineering-title">A Folding Wall Is Only as Strong as Its Hardware, Glass, and Support System</h2>
+            <p>
+              Large operable glass walls depend on the components behind the view:
+              heavy-duty rollers and hinges, multi-point locking where applicable,
+              Low-E insulated glass packages, argon-filled glazing options, thermal
+              break aluminum profiles, durable powder coating, PVDF, wood-grain finish
+              options, and corrosion-resistant components for coastal projects where required.
+            </p>
+            <ul class="check-list">
+              <li>Bottom-supported stability for heavy panels and wide openings.</li>
+              <li>Reinforced profiles and hardware selected around project conditions.</li>
+              <li>Wind, water, and thermal requirements reviewed as project-dependent.</li>
+            </ul>
+          </div>
+        </div>
+      </section>
+
+      <section class="section section--warm split split--reverse" aria-labelledby="components-title">
+        <div class="container split__grid">
+          <div>
+            <p class="eyebrow">Component confidence</p>
+            <h2 id="components-title">Global Components. Project-Specific Manufacturing.</h2>
+            <p>
+              LIKI integrates the aluminum profile system, hardware package, glazing
+              package, sealing and drainage logic, finish system, CNC manufacturing,
+              and QC before export packaging. The result is not a generic door order;
+              it is a coordinated wall system built for the project.
+            </p>
+          </div>
+          <div class="stacked-images">
+            <ImageBlock {...images.factory} className="image-card" />
+            <ImageBlock {...images.consultation} className="image-card image-card--small" />
+          </div>
+        </div>
+      </section>
+
+      <section class="section" aria-labelledby="audience-title">
+        <div class="container">
+          <div class="section__intro">
+            <p class="eyebrow">Specifier-ready</p>
+            <h2 id="audience-title">Built for the People Who Specify, Install, and Live With the System</h2>
+          </div>
+          <div class="feature-grid feature-grid--three value-grid">
+            <article>
+              <ImageBlock {...images.architects} className="feature-image" />
+              <h3>For Architects</h3>
+              <p>CAD and shop drawing support, performance data, custom configurations, and design flexibility for ambitious openings.</p>
+            </article>
+            <article>
+              <ImageBlock {...images.builders} className="feature-image" />
+              <h3>For Builders</h3>
+              <p>Installation guidance, predictable packaging, direct-to-site delivery support, and reduced mismatch risk before production.</p>
+            </article>
+            <article>
+              <ImageBlock {...images.homeowners} className="feature-image" />
+              <h3>For Homeowners</h3>
+              <p>Cleaner views, indoor-outdoor living, premium finishes, and confidence from engineering review.</p>
+            </article>
+          </div>
+        </div>
+      </section>
+
+      <section class="section section--dark split split--reverse" id="delivery" aria-labelledby="delivery-title">
+        <div class="container split__grid">
+          <ImageBlock {...images.lifecycle} className="image-card" />
+          <div>
+            <p class="eyebrow">Risk reduction</p>
+            <h2 id="delivery-title">From Drawings to Door-to-Site Delivery</h2>
+            <p>
+              Distance should not leave the project guessing. Before production,
+              opening sizes, configurations, shop drawings, finish selections, and
+              packing requirements can be reviewed so the wall is built around the
+              documented project conditions.
+            </p>
+            <div class="process-list" aria-label="Project delivery process">
+              <span>Consultation</span>
+              <span>Opening Size Review</span>
+              <span>Configuration & Drawings</span>
+              <span>Production</span>
+              <span>QC & Packaging</span>
+              <span>Export / Direct-to-Site Delivery</span>
+            </div>
+            <p>
+              Replacement parts and support can be coordinated from project records
+              when future service needs arise.
+            </p>
+            <CTAButton label="Start Your Folding Wall Project" />
+          </div>
+        </div>
+      </section>
+
+      <section class="section split" aria-labelledby="packaging-title">
+        <div class="container split__grid">
+          <div>
+            <p class="eyebrow">Export packaging</p>
+            <h2 id="packaging-title">Export Packaging Built for Large Glass Wall Systems</h2>
+            <p>
+              Oversized glass panels and aluminum frames need more than basic crating.
+              LIKI can prepare enclosed wooden crates with foam and corner protection,
+              internal reinforcement, panel labeling, and project-based packing lists
+              to reduce transportation damage risk.
+            </p>
+          </div>
+          <ImageBlock {...images.packaging} className="image-card" />
+        </div>
+      </section>
+
+      <section class="section section--warm split split--reverse" aria-labelledby="testing-title">
+        <div class="container split__grid">
+          <ImageBlock {...images.lab} className="image-card" />
+          <div>
+            <p class="eyebrow">Technical compliance</p>
+            <h2 id="testing-title">Performance and Certification Support for Project Requirements</h2>
+            <p>
+              NFRC, AAMA, ASTM, Florida NOA, Title 24, testing documents, and
+              performance data may be available depending on the product, configuration,
+              glass package, and project requirements.
+            </p>
+            <p>
+              Certification support is not universal for every configuration. LIKI
+              reviews requirements against the project scope before confirming the
+              appropriate documentation path.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <section class="section" aria-labelledby="showcase-title">
+        <div class="container">
+          <div class="section__intro">
+            <p class="eyebrow">Architectural showcase</p>
+            <h2 id="showcase-title">A Custom Folding Wall for Projects That Need More Than a Standard Door</h2>
+            <p>
+              Use LIKI 125HFD when the opening, finish, panel size, corner condition,
+              screen detail, or delivery plan needs a project-specific answer.
+            </p>
+          </div>
+          <ImageBlock {...images.portfolio} className="full-bleed-image" />
+        </div>
+      </section>
+
+      <section class="section faq" id="faq" aria-labelledby="faq-title">
+        <div class="container">
+          <div class="section__intro">
+            <p class="eyebrow">FAQ</p>
+            <h2 id="faq-title">Questions North American Projects Usually Ask First</h2>
+          </div>
+          <div class="faq__list">
+            {faqs.map((item) => (
+              <details>
+                <summary>{item.q}</summary>
+                <p>{item.a}</p>
+              </details>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      <InquiryForm />
+
+      <section class="final-cta" aria-labelledby="final-title">
+        <ImageBlock
+          {...images.finalCta}
+          className="final-cta__image"
+          loading="lazy"
+        />
+        <div class="final-cta__overlay"></div>
+        <div class="container final-cta__content">
+          <p class="eyebrow">Project-ready folding glass walls</p>
+          <h2 id="final-title">Send the opening size. LIKI will help define the system around it.</h2>
+          <p>
+            Share the rough opening, location, configuration goals, finish preference,
+            drawings if available, and any performance requirements. We will review
+            the project and recommend the next technical step.
+          </p>
+          <CTAButton label="Start Your Folding Wall Project" />
+        </div>
+      </section>
+    </main>
+    <PopupInquiryForm />
+  </body>
+</html>

@@ -1,0 +1,26 @@
+---
+const navItems = [
+  ["Overview", "#overview"],
+  ["Living", "#open-living"],
+  ["Features", "#features"],
+  ["Custom", "#custom"],
+  ["Engineering", "#engineering"],
+  ["Delivery", "#delivery"],
+  ["FAQ", "#faq"],
+  ["Quote", "#quote"]
+];
+---
+
+<nav class="floating-nav" aria-label="Section navigation">
+  <span class="floating-nav__title">Explore</span>
+  {navItems.map(([label, href]) => (
+    <a href={href} aria-label={label}>
+      <span class="dot" aria-hidden="true"></span>
+      <span class="label">{label}</span>
+    </a>
+  ))}
+  <a class="floating-nav__top" href="#top" aria-label="Back to top">
+    <span class="dot" aria-hidden="true">↑</span>
+    <span class="label">Top</span>
+  </a>
+</nav>

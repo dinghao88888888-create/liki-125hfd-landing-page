@@ -22,6 +22,14 @@ function row(label, value) {
   return `<tr><td style="padding:8px 12px;border-bottom:1px solid #eee;color:#666;width:190px;">${escapeHtml(label)}</td><td style="padding:8px 12px;border-bottom:1px solid #eee;color:#111;">${escapeHtml(value || "-")}</td></tr>`;
 }
 
+function getField(body, label, camelKey) {
+  const payload = body && typeof body === "object" ? body : {};
+  const nestedFields = payload.fields && typeof payload.fields === "object" ? payload.fields : {};
+  const value = nestedFields[label] ?? payload[label] ?? payload[camelKey];
+  if (value === undefined || value === null) return "";
+  return String(value).trim();
+}
+
 export async function onRequestPost({ request, env }) {
   try {
     const required = ["RESEND_API_KEY", "DOWNLOAD_TOKEN_SECRET", "INQUIRY_FROM_EMAIL", "INQUIRY_TO_EMAIL"];
@@ -31,7 +39,13 @@ export async function onRequestPost({ request, env }) {
     }
 
     const body = await request.json();
-    const fields = body.fields && typeof body.fields === "object" ? body.fields : {};
+    const rawFields = body.fields && typeof body.fields === "object" ? body.fields : {};
+    const fields = {
+      ...rawFields,
+      "Full Name": getField(body, "Full Name", "fullName"),
+      "Work Email": getField(body, "Work Email", "workEmail"),
+      "Project Location": getField(body, "Project Location", "projectLocation")
+    };
     const files = Array.isArray(body.files) ? body.files : [];
     const subject = String(body.subject || "LIKI 125HFD Landing Page Inquiry");
 

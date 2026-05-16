@@ -142,12 +142,14 @@
         event.preventDefault();
         const current = state.get(form);
         if (current.isSubmitting) return;
+        if (!form.reportValidity()) return;
 
         const errorBox = form.querySelector("[data-inquiry-error]");
         const successBox = form.querySelector("[data-inquiry-success]");
         const submitButton = form.querySelector("[data-submit-button]");
         const fileInput = form.querySelector("[data-file-input]");
         const files = fileInput ? [...fileInput.files] : [];
+        const fields = collectFields(form);
 
         show(errorBox, false);
         show(successBox, false);
@@ -165,7 +167,7 @@
             body: JSON.stringify({
               subject: form.dataset.inquirySubject,
               source: form.dataset.inquirySource,
-              fields: collectFields(form),
+              fields,
               files: uploadedFiles
             })
           });

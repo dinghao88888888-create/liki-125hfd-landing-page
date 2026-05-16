@@ -15,16 +15,10 @@ import { SITE } from "../data/site.js";
 
     <form
       class="inquiry-form"
-      action={SITE.web3formsAction}
-      method="POST"
-      enctype="multipart/form-data"
+      data-inquiry-form
+      data-inquiry-source="LIKI 125HFD Landing Page"
+      data-inquiry-subject="LIKI 125HFD Landing Page Inquiry"
     >
-      <input type="hidden" name="access_key" value={SITE.web3formsAccessKey} />
-      <input type="hidden" name="subject" value="LIKI 125HFD Landing Page Inquiry" />
-      <input type="hidden" name="from_name" value="LIKI Systems Website" />
-      <input type="hidden" name="source" value="LIKI 125HFD Landing Page" />
-      <input type="hidden" name="redirect" value="/thank-you/" />
-
       <div class="form-field">
         <label for="full-name">Full Name *</label>
         <input id="full-name" name="Full Name" type="text" autocomplete="name" required />
@@ -102,11 +96,30 @@ import { SITE } from "../data/site.js";
 
       <div class="form-field form-field--full">
         <label for="plans-drawings">Upload Plans / Drawings</label>
-        <input id="plans-drawings" name="Upload Plans / Drawings" type="file" accept=".pdf,.dwg,.dxf,.jpg,.jpeg,.png" />
-        <p class="form-note">You can also email drawings directly to {SITE.email}.</p>
+        <input
+          id="plans-drawings"
+          name="Upload Plans / Drawings"
+          type="file"
+          accept=".dwg,.pdf,.zip,.step,.stp,.jpg,.jpeg,.png"
+          multiple
+          data-file-input
+        />
+        <p class="form-note">Upload up to 5 files, 500MB each. You can also email drawings directly to {SITE.email}.</p>
       </div>
 
-      <button class="form-submit" type="submit">Request Project Quote</button>
+      <div class="upload-progress" data-upload-progress hidden>
+        <div class="upload-progress__track">
+          <span class="upload-progress__bar" data-upload-progress-bar></span>
+        </div>
+        <p class="upload-progress__status" data-upload-status>Uploading...</p>
+      </div>
+
+      <p class="form-error" data-inquiry-error hidden></p>
+      <p class="form-success" data-inquiry-success hidden>
+        Thank you. Your inquiry has been received. You can also visit the <a href="/thank-you/">thank-you page</a>.
+      </p>
+
+      <button class="form-submit" type="submit" data-submit-button>Request Project Quote</button>
     </form>
   </div>
 </section>

@@ -1,0 +1,176 @@
+<script>
+  (() => {
+    const maxFiles = 5;
+    const maxFileSize = 500 * 1024 * 1024;
+    const allowedExtensions = new Set(["dwg", "pdf", "zip", "step", "stp", "jpg", "jpeg", "png"]);
+    const state = new WeakMap();
+
+    const formatBytes = (bytes) => {
+      if (!bytes) return "0 B";
+      const units = ["B", "KB", "MB", "GB"];
+      const index = Math.min(Math.floor(Math.log(bytes) / Math.log(1024)), units.length - 1);
+      return `${(bytes / 1024 ** index).toFixed(index ? 1 : 0)} ${units[index]}`;
+    };
+
+    const getExtension = (name) => {
+      const index = name.lastIndexOf(".");
+      return index >= 0 ? name.slice(index + 1).toLowerCase() : "";
+    };
+
+    const show = (element, visible = true) => {
+      if (element) element.hidden = !visible;
+    };
+
+    const setText = (element, text) => {
+      if (element) element.textContent = text;
+    };
+
+    const setProgress = (form, percent, status) => {
+      const wrap = form.querySelector("[data-upload-progress]");
+      const bar = form.querySelector("[data-upload-progress-bar]");
+      const label = form.querySelector("[data-upload-status]");
+      show(wrap, true);
+      if (bar) bar.style.width = `${Math.max(0, Math.min(100, percent))}%`;
+      setText(label, status);
+    };
+
+    const validateFiles = (files) => {
+      if (files.length > maxFiles) throw new Error(`Upload up to ${maxFiles} files per inquiry.`);
+      files.forEach((file) => {
+        const ext = getExtension(file.name);
+        if (!allowedExtensions.has(ext)) {
+          throw new Error(`Unsupported file type .${ext || "unknown"}. Please upload DWG, PDF, ZIP, STEP, JPG, or PNG files.`);
+        }
+        if (file.size > maxFileSize) {
+          throw new Error(`${file.name} is ${formatBytes(file.size)}. Each file must be 500MB or smaller.`);
+        }
+      });
+    };
+
+    const xhrUpload = (upload, file, onProgress) =>
+      new Promise((resolve, reject) => {
+        const xhr = new XMLHttpRequest();
+        xhr.open("PUT", upload.uploadUrl);
+        if (file.type) xhr.setRequestHeader("content-type", file.type);
+        xhr.upload.addEventListener("progress", (event) => {
+          if (event.lengthComputable) onProgress(event.loaded);
+        });
+        xhr.addEventListener("load", () => {
+          if (xhr.status >= 200 && xhr.status < 300) resolve();
+          else reject(new Error(`Upload failed for ${file.name} with status ${xhr.status}.`));
+        });
+        xhr.addEventListener("error", () => reject(new Error(`Upload failed for ${file.name}. Please check your connection and try again.`)));
+        xhr.addEventListener("abort", () => reject(new Error(`Upload canceled for ${file.name}.`)));
+        xhr.send(file);
+      });
+
+    const uploadFiles = async (form, files) => {
+      if (!files.length) return [];
+      setProgress(form, 0, "Uploading...");
+      const response = await fetch("/api/uploads/sign", {
+        method: "POST",
+        headers: { "content-type": "application/json" },
+        body: JSON.stringify({
+          files: files.map((file) => ({
+            name: file.name,
+            size: file.size,
+            type: file.type || "application/octet-stream"
+          }))
+        })
+      });
+      const result = await response.json().catch(() => ({}));
+      if (!response.ok) throw new Error(result.error || "Could not prepare file upload.");
+
+      const uploads = result.uploads || [];
+      const totalBytes = files.reduce((sum, file) => sum + file.size, 0);
+      const loadedByFile = new Map();
+
+      for (let index = 0; index < files.length; index += 1) {
+        const file = files[index];
+        const upload = uploads[index];
+        await xhrUpload(upload, file, (loaded) => {
+          loadedByFile.set(index, loaded);
+          const loadedTotal = [...loadedByFile.values()].reduce((sum, value) => sum + value, 0);
+          setProgress(form, Math.round((loadedTotal / totalBytes) * 100), "Uploading...");
+        });
+        loadedByFile.set(index, file.size);
+      }
+
+      setProgress(form, 100, "Upload complete");
+      return uploads.map((upload) => ({
+        key: upload.key,
+        originalName: upload.originalName,
+        size: upload.size,
+        type: upload.type
+      }));
+    };
+
+    const collectFields = (form) => {
+      const formData = new FormData(form);
+      const fields = {};
+      for (const [name, value] of formData.entries()) {
+        if (value instanceof File) continue;
+        fields[name] = value;
+      }
+      return fields;
+    };
+
+    const setDisabled = (form, disabled) => {
+      form.querySelectorAll("input, select, textarea, button").forEach((control) => {
+        control.disabled = disabled;
+      });
+    };
+
+    document.querySelectorAll("[data-inquiry-form]").forEach((form) => {
+      state.set(form, { isSubmitting: false });
+      form.addEventListener("submit", async (event) => {
+        event.preventDefault();
+        const current = state.get(form);
+        if (current.isSubmitting) return;
+
+        const errorBox = form.querySelector("[data-inquiry-error]");
+        const successBox = form.querySelector("[data-inquiry-success]");
+        const submitButton = form.querySelector("[data-submit-button]");
+        const fileInput = form.querySelector("[data-file-input]");
+        const files = fileInput ? [...fileInput.files] : [];
+
+        show(errorBox, false);
+        show(successBox, false);
+
+        try {
+          current.isSubmitting = true;
+          setDisabled(form, true);
+          setText(submitButton, "Submitting...");
+          validateFiles(files);
+
+          const uploadedFiles = await uploadFiles(form, files);
+          const response = await fetch("/api/inquiry", {
+            method: "POST",
+            headers: { "content-type": "application/json" },
+            body: JSON.stringify({
+              subject: form.dataset.inquirySubject,
+              source: form.dataset.inquirySource,
+              fields: collectFields(form),
+              files: uploadedFiles
+            })
+          });
+          const result = await response.json().catch(() => ({}));
+          if (!response.ok) throw new Error(result.error || "Inquiry submission failed.");
+
+          form.reset();
+          setProgress(form, uploadedFiles.length ? 100 : 0, uploadedFiles.length ? "Upload complete" : "No files uploaded");
+          show(successBox, true);
+          form.dispatchEvent(new CustomEvent("inquiry-success", { bubbles: true }));
+        } catch (error) {
+          setProgress(form, 0, "Upload failed");
+          setText(errorBox, error.message || "Submission failed. Please try again.");
+          show(errorBox, true);
+        } finally {
+          current.isSubmitting = false;
+          setDisabled(form, false);
+          setText(submitButton, "Request Project Quote");
+        }
+      });
+    });
+  })();
+</script>

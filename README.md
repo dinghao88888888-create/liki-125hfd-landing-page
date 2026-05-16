@@ -21,13 +21,37 @@ Build output: `dist`
 
 Recommended custom domain: `125hfd.likisystems.com`
 
+## Inquiry Upload System
+
+The inquiry forms use Cloudflare Pages Functions, Cloudflare R2, and Resend.
+
+Required Cloudflare Pages environment variables:
+
+```text
+RESEND_API_KEY
+INQUIRY_FROM_EMAIL=LIKI Systems <info@likisystems.com>
+INQUIRY_TO_EMAIL=info@likisystems.com
+R2_ACCOUNT_ID
+R2_ACCESS_KEY_ID
+R2_SECRET_ACCESS_KEY
+DOWNLOAD_TOKEN_SECRET
+```
+
+Required Cloudflare Pages binding:
+
+```text
+UPLOAD_BUCKET -> R2 bucket liki-upload
+```
+
+R2 CORS must allow `PUT` uploads from the Pages preview domain and production custom domain.
+
 ## Project Notes
 
 - No WordPress dependency.
 - No Bricks Builder dependency.
 - No header, footer, or navigation menu.
-- No SSR, backend, database, CMS, or serverless functions.
+- No SSR, database, or CMS. Cloudflare Pages Functions are used only for inquiry uploads, private R2 downloads, and Resend email notifications.
 - All landing page image assets are local in `public/images/`.
 - Images were generated with Codex built-in image generation. The generator returned PNG files, and no local WebP converter was available, so the site references PNG assets.
 - Contact settings are centralized in `src/data/site.js`.
-- The Web3Forms redirect is currently set to `/thank-you/` so it works on the deployed Pages domain and the final custom domain. If Web3Forms requires an absolute URL for your account settings, update the redirect to the production domain, such as `https://125hfd.likisystems.com/thank-you/`, before launching paid traffic.
+- The inquiry success state is shown inline and links to `/thank-you/`.

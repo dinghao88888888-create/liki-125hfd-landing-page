@@ -1,7 +1,3 @@
----
-import { SITE } from "../data/site.js";
----
-
 <div class="popup-inquiry" data-popup-inquiry hidden>
   <div class="popup-inquiry__overlay" data-popup-close></div>
   <section
@@ -12,7 +8,7 @@ import { SITE } from "../data/site.js";
     tabindex="-1"
   >
     <button class="popup-inquiry__close" type="button" data-popup-close aria-label="Close inquiry popup">
-      <span aria-hidden="true">×</span>
+      <span aria-hidden="true">&times;</span>
     </button>
 
     <p class="eyebrow">Project review</p>
@@ -24,16 +20,11 @@ import { SITE } from "../data/site.js";
 
     <form
       class="popup-inquiry__form"
-      action={SITE.web3formsAction}
-      method="POST"
       data-popup-form
+      data-inquiry-form
+      data-inquiry-source="LIKI 125HFD Landing Page Popup"
+      data-inquiry-subject="LIKI 125HFD Popup Inquiry"
     >
-      <input type="hidden" name="access_key" value={SITE.web3formsAccessKey} />
-      <input type="hidden" name="subject" value="LIKI 125HFD Popup Inquiry" />
-      <input type="hidden" name="from_name" value="LIKI Systems Website" />
-      <input type="hidden" name="source" value="LIKI 125HFD Landing Page Popup" />
-      <input type="hidden" name="redirect" value="/thank-you/" />
-
       <div class="popup-field">
         <label for="popup-full-name">Full Name *</label>
         <input id="popup-full-name" name="Full Name" type="text" autocomplete="name" required />
@@ -69,8 +60,33 @@ import { SITE } from "../data/site.js";
         ></textarea>
       </div>
 
-      <p class="popup-inquiry__helper">You can also send drawings later by email or WhatsApp.</p>
-      <button class="popup-inquiry__submit" type="submit">Request Project Quote</button>
+      <div class="popup-field popup-field--full">
+        <label for="popup-plans-drawings">Upload Plans / Drawings</label>
+        <input
+          id="popup-plans-drawings"
+          name="Upload Plans / Drawings"
+          type="file"
+          accept=".dwg,.pdf,.zip,.step,.stp,.jpg,.jpeg,.png"
+          multiple
+          data-file-input
+        />
+      </div>
+
+      <p class="popup-inquiry__helper">Upload up to 5 files, 500MB each. You can also send drawings later by email or WhatsApp.</p>
+
+      <div class="upload-progress" data-upload-progress hidden>
+        <div class="upload-progress__track">
+          <span class="upload-progress__bar" data-upload-progress-bar></span>
+        </div>
+        <p class="upload-progress__status" data-upload-status>Uploading...</p>
+      </div>
+
+      <p class="form-error" data-inquiry-error hidden></p>
+      <p class="form-success" data-inquiry-success hidden>
+        Thank you. Your inquiry has been received. You can also visit the <a href="/thank-you/">thank-you page</a>.
+      </p>
+
+      <button class="popup-inquiry__submit" type="submit" data-submit-button>Request Project Quote</button>
     </form>
   </section>
 </div>
@@ -216,7 +232,7 @@ import { SITE } from "../data/site.js";
       }
     });
 
-    form?.addEventListener("submit", () => {
+    form?.addEventListener("inquiry-success", () => {
       storageSet(keys.submitted, "true");
       dismissedThisSession = true;
       unlockBody();

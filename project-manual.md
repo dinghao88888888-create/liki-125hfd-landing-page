@@ -1,6 +1,6 @@
 # LIKI 125HFD Landing Page - Long-term AI Project Manual
 
-Last updated: 2026-05-16
+Last updated: 2026-05-17
 
 This document is the long-term working manual for the LIKI 125HFD landing page project. It is intended for future AI assistants, developers, and non-technical collaborators who need to continue the project across multiple chats and deployment stages.
 
@@ -18,11 +18,13 @@ The page should support North American luxury residential, architectural, builde
 
 ### Current Stage
 
-Deployment and infrastructure setup stage.
+Deployment and production verification stage.
 
 The Astro landing page is built. Local image assets are present. Floating navigation, WhatsApp CTA, main inquiry form, popup inquiry form, thank-you page, Cloudflare Pages Functions, R2 upload logic, and Resend email logic have been implemented.
 
-Current deployment work is focused on Cloudflare Pages environment variables, R2 binding, R2 CORS, and production testing.
+Current production testing confirms that the main inquiry form can submit successfully without files. Required-field validation has been fixed, and the backend now correctly recognizes `Full Name`, `Work Email`, and `Project Location` from the submitted payload. Resend email delivery to `info@likisystems.com` has been verified for the main inquiry flow.
+
+The remaining known production issue is file upload failure. Image and `.xlsx` upload tests currently show `Upload failed`, so the next focused task should isolate the R2 upload path.
 
 ### Project Positioning
 
@@ -474,6 +476,11 @@ Requires `UPLOAD_BUCKET` binding and `DOWNLOAD_TOKEN_SECRET`.
 - Inline success and error messages.
 - Upload progress UI.
 - Multiple files supported.
+- Online test without files has succeeded.
+- Required-field validation now correctly recognizes `Full Name`, `Work Email`, and `Project Location`.
+- Verified Resend email delivery to `info@likisystems.com`.
+- Verified inquiry email subject: `LIKI 125HFD Landing Page Inquiry`.
+- Verified inquiry email content includes customer name, email, phone, company, project location, project type, interested system, project stage, and message fields.
 
 ### Popup Inquiry Form
 
@@ -497,9 +504,29 @@ Requires `UPLOAD_BUCKET` binding and `DOWNLOAD_TOKEN_SECRET`.
 
 ## 7. Known Issues
 
-### Deployment Configuration Not Fully Verified
+### File Upload To R2 Still Fails
 
-Cloudflare Pages variables, R2 binding, and R2 CORS must be configured before the upload system works in production.
+The main inquiry flow is now working in production, but file upload is still failing.
+
+Confirmed upload symptoms:
+
+- Image upload tests show `Upload failed`.
+- `.xlsx` upload tests show `Upload failed`.
+- This issue is intentionally deferred for a separate upload-focused debugging task.
+
+Current judgment:
+
+- Main inquiry submission and Resend notification flow are working.
+- The remaining failure is concentrated in the upload chain:
+  - `/api/uploads/sign`
+  - Cloudflare Pages R2 binding
+  - Browser `PUT` upload to R2
+  - MIME validation
+  - R2 CORS
+
+### Deployment Configuration Partially Verified
+
+Cloudflare Pages deployment is online, and the main inquiry email flow has been verified. R2 upload variables, R2 binding, and R2 CORS still need focused verification before file uploads can be considered production-ready.
 
 Required environment variables:
 
@@ -561,22 +588,43 @@ TODO: Consider converting images to WebP later for better performance.
 
 Priority order:
 
-1. Complete Cloudflare Pages environment variables.
-2. Add R2 bucket binding `UPLOAD_BUCKET`.
-3. Configure R2 CORS.
-4. Redeploy Cloudflare Pages.
-5. Test inquiry submission without file.
-6. Test inquiry submission with JPG/PDF/DOCX.
-7. Confirm Resend email arrives at `info@likisystems.com`.
-8. Confirm private download links work.
-9. Bind final custom domain.
-10. Update README and this manual after production URL is confirmed.
+1. Open a new task dedicated to file upload failure.
+2. Check `/api/uploads/sign`.
+3. Check Cloudflare Pages R2 binding.
+4. Check that the bucket binding name matches the code.
+5. Check MIME type allowlist and R2 CORS.
+6. Retest image upload.
+7. Retest `.xlsx` upload.
+8. Confirm private download links work after upload succeeds.
+9. Bind final custom domain if not already complete.
+10. Update this manual after the upload flow is fixed.
 
 ## 9. Handoff Section
 
 ### Current State Summary
 
 The landing page code is implemented and builds successfully. Web3Forms has been replaced with a Cloudflare R2 + Resend inquiry system.
+
+The main inquiry flow has been verified online:
+
+- The main inquiry form can submit successfully without files.
+- Required-field validation has been fixed.
+- `Full Name`, `Work Email`, and `Project Location` are correctly recognized by the backend.
+- Resend successfully sends inquiry email to `info@likisystems.com`.
+- The verified inquiry email subject is `LIKI 125HFD Landing Page Inquiry`.
+- The verified inquiry email content includes customer name, email, phone, company, project location, project type, interested system, project stage, and message fields.
+
+Git and deployment state:
+
+- The inquiry validation fix has been pushed to GitHub `main`.
+- Cloudflare Pages has automatically deployed the pushed `main` branch.
+- Online testing confirms the inquiry email can be received.
+
+Remaining issue:
+
+- File upload to R2 still fails.
+- Image and `.xlsx` upload tests currently show `Upload failed`.
+- This should be handled in a separate upload-focused debugging task.
 
 The GitHub repository exists:
 
@@ -595,6 +643,11 @@ Recent completed work:
 - Added Resend inquiry email sending.
 - Added private signed download proxy.
 - Added upload progress and status UI.
+- Fixed backend required-field validation compatibility for inquiry payloads.
+- Verified online main inquiry form submission without files.
+- Verified Resend delivery to `info@likisystems.com`.
+- Pushed the validation fix to GitHub `main`.
+- Confirmed Cloudflare Pages automatic deployment.
 - Extended allowed file types to include Office documents:
   - `.doc`
   - `.docx`
@@ -604,36 +657,36 @@ Recent completed work:
 
 ### Next Step Suggestions
 
-1. In Cloudflare Pages, add missing environment variables.
-2. In Cloudflare Pages, add R2 binding:
-
-```text
-UPLOAD_BUCKET = liki-upload
-```
-
-3. Configure R2 CORS.
-4. Redeploy Pages.
-5. Test real form submission.
-6. Push latest upload file type commit if not already pushed:
-
-```powershell
-git --git-dir=.git-clean --work-tree=. push
-```
+1. Open a new task dedicated to file upload failure.
+2. Check `/api/uploads/sign`.
+3. Check Cloudflare Pages R2 binding.
+4. Check that the bucket binding name matches the code.
+5. Check MIME type allowlist.
+6. Check R2 CORS for browser `PUT` uploads.
+7. Retest image upload and `.xlsx` upload after each likely fix.
 
 ### Current Blockers
 
-- Cloudflare Pages may still be missing R2 variables:
+- File upload to R2 is still failing in production.
+- Image and `.xlsx` upload tests show `Upload failed`.
+- Main inquiry submission without files is no longer blocked.
+- The likely remaining upload investigation areas are:
+  - `/api/uploads/sign`
   - `R2_ACCOUNT_ID`
   - `R2_ACCESS_KEY_ID`
   - `R2_SECRET_ACCESS_KEY`
-  - `DOWNLOAD_TOKEN_SECRET`
-- R2 binding may not yet be added.
-- R2 CORS may not yet be configured.
+  - Cloudflare Pages R2 binding
+  - `UPLOAD_BUCKET` binding name versus code expectations
+  - MIME type allowlist
+  - R2 CORS for browser `PUT`
 - Production custom domain is not yet confirmed in this manual.
 
 ### Notes for Future Continuation
 
+- Treat the main inquiry flow as working unless new evidence shows otherwise.
+- Treat file upload as a separate unresolved R2 upload-flow issue.
 - If uploads show `Missing environment variables`, check Pages environment variables first.
+- If `/api/uploads/sign` succeeds but browser upload fails, check R2 CORS and presigned `PUT` behavior.
 - If uploads fail after signing, check R2 CORS.
 - If uploads work but emails fail, check `RESEND_API_KEY`, verified sender domain, and `INQUIRY_FROM_EMAIL`.
 - If email links fail, check `DOWNLOAD_TOKEN_SECRET` and `UPLOAD_BUCKET` binding.
@@ -706,8 +759,11 @@ Do not modify unless explicitly requested:
 
 - TODO: Confirm final Cloudflare Pages production URL.
 - TODO: Confirm final custom domain.
-- TODO: Confirm R2 CORS settings after the final domain is chosen.
-- TODO: Confirm Resend production sender works from `info@likisystems.com`.
-- TODO: Test form submission after Cloudflare variables and binding are configured.
+- TODO: Open a new task dedicated to file upload failure.
+- TODO: Check `/api/uploads/sign`.
+- TODO: Check Cloudflare Pages R2 binding and `UPLOAD_BUCKET` binding name.
+- TODO: Check MIME type allowlist.
+- TODO: Confirm R2 CORS settings for browser `PUT` uploads.
+- TODO: Retest image and `.xlsx` uploads.
 - TODO: Consider image WebP conversion later.
 - TODO: Consider Turnstile later if spam appears.

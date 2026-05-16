@@ -2,7 +2,20 @@
   (() => {
     const maxFiles = 5;
     const maxFileSize = 500 * 1024 * 1024;
-    const allowedExtensions = new Set(["dwg", "pdf", "zip", "step", "stp", "jpg", "jpeg", "png"]);
+    const allowedExtensions = new Set([
+      "dwg",
+      "pdf",
+      "zip",
+      "step",
+      "stp",
+      "jpg",
+      "jpeg",
+      "png",
+      "doc",
+      "docx",
+      "xls",
+      "xlsx"
+    ]);
     const state = new WeakMap();
 
     const formatBytes = (bytes) => {
@@ -39,7 +52,9 @@
       files.forEach((file) => {
         const ext = getExtension(file.name);
         if (!allowedExtensions.has(ext)) {
-          throw new Error(`Unsupported file type .${ext || "unknown"}. Please upload DWG, PDF, ZIP, STEP, JPG, or PNG files.`);
+          throw new Error(
+            `Unsupported file type .${ext || "unknown"}. Please upload DWG, PDF, ZIP, STEP, JPG, PNG, DOC, or Excel files.`
+          );
         }
         if (file.size > maxFileSize) {
           throw new Error(`${file.name} is ${formatBytes(file.size)}. Each file must be 500MB or smaller.`);

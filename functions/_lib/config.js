@@ -9,7 +9,11 @@ export const ALLOWED_EXTENSIONS = new Set([
   "stp",
   "jpg",
   "jpeg",
-  "png"
+  "png",
+  "doc",
+  "docx",
+  "xls",
+  "xlsx"
 ]);
 
 export const ALLOWED_MIME_TYPES = new Set([
@@ -18,6 +22,10 @@ export const ALLOWED_MIME_TYPES = new Set([
   "application/autocad",
   "application/octet-stream",
   "application/pdf",
+  "application/msword",
+  "application/vnd.ms-excel",
+  "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+  "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
   "application/zip",
   "application/x-zip-compressed",
   "image/jpeg",
@@ -60,7 +68,7 @@ export function validateFile(file) {
 
   if (!name) return "File name is required.";
   if (!ALLOWED_EXTENSIONS.has(ext)) {
-    return `Unsupported file type .${ext || "unknown"}. Please upload DWG, PDF, ZIP, STEP, JPG, or PNG files.`;
+    return `Unsupported file type .${ext || "unknown"}. Please upload DWG, PDF, ZIP, STEP, JPG, PNG, DOC, or Excel files.`;
   }
   if (!Number.isFinite(size) || size <= 0) return "File size is invalid.";
   if (size > MAX_FILE_SIZE) return "Each uploaded file must be 500MB or smaller.";

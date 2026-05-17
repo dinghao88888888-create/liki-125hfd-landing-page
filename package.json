@@ -10,6 +10,8 @@
   },
   "dependencies": {
     "@astrojs/check": "^0.9.4",
+    "@aws-sdk/client-s3": "^3.1045.0",
+    "@aws-sdk/s3-request-presigner": "^3.1045.0",
     "astro": "^4.16.18",
     "typescript": "^5.6.3"
   },

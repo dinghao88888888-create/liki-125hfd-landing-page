@@ -66,7 +66,7 @@
       new Promise((resolve, reject) => {
         const xhr = new XMLHttpRequest();
         xhr.open("PUT", upload.uploadUrl);
-        if (file.type) xhr.setRequestHeader("content-type", file.type);
+        if (upload.type) xhr.setRequestHeader("content-type", upload.type);
         xhr.upload.addEventListener("progress", (event) => {
           if (event.lengthComputable) onProgress(event.loaded);
         });

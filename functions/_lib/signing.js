@@ -1,3 +1,6 @@
+import { PutObjectCommand, S3Client } from "@aws-sdk/client-s3";
+import { getSignedUrl } from "@aws-sdk/s3-request-presigner";
+
 const encoder = new TextEncoder();
 
 function base64UrlFromBytes(bytes) {
@@ -46,71 +49,24 @@ export async function verifyDownloadToken(token, secret) {
   return payload;
 }
 
-function awsEncode(value) {
-  return encodeURIComponent(value).replace(/[!'()*]/g, (char) =>
-    `%${char.charCodeAt(0).toString(16).toUpperCase()}`
-  );
+function createR2Client(env) {
+  return new S3Client({
+    region: "auto",
+    endpoint: `https://${env.R2_ACCOUNT_ID}.r2.cloudflarestorage.com`,
+    forcePathStyle: true,
+    credentials: {
+      accessKeyId: env.R2_ACCESS_KEY_ID,
+      secretAccessKey: env.R2_SECRET_ACCESS_KEY
+    }
+  });
 }
 
-async function sha256Hex(value) {
-  const digest = await crypto.subtle.digest("SHA-256", encoder.encode(value));
-  return [...new Uint8Array(digest)].map((byte) => byte.toString(16).padStart(2, "0")).join("");
-}
+export async function createR2PresignedPutUrl({ env, bucket, key, contentType, expiresIn = 3600 }) {
+  const command = new PutObjectCommand({
+    Bucket: bucket,
+    Key: key,
+    ...(contentType ? { ContentType: contentType } : {})
+  });
 
-async function hmacRaw(keyBytes, value) {
-  const key = await crypto.subtle.importKey(
-    "raw",
-    keyBytes,
-    { name: "HMAC", hash: "SHA-256" },
-    false,
-    ["sign"]
-  );
-  return new Uint8Array(await crypto.subtle.sign("HMAC", key, encoder.encode(value)));
-}
-
-async function getSigningKey(secretAccessKey, dateStamp) {
-  const kDate = await hmacRaw(encoder.encode(`AWS4${secretAccessKey}`), dateStamp);
-  const kRegion = await hmacRaw(kDate, "auto");
-  const kService = await hmacRaw(kRegion, "s3");
-  return hmacRaw(kService, "aws4_request");
-}
-
-export async function createR2PresignedPutUrl({ env, bucket, key, expiresIn = 3600 }) {
-  const now = new Date();
-  const amzDate = now.toISOString().replace(/[:-]|\.\d{3}/g, "");
-  const dateStamp = amzDate.slice(0, 8);
-  const host = `${env.R2_ACCOUNT_ID}.r2.cloudflarestorage.com`;
-  const credentialScope = `${dateStamp}/auto/s3/aws4_request`;
-  const credential = `${env.R2_ACCESS_KEY_ID}/${credentialScope}`;
-  const canonicalUri = `/${awsEncode(bucket)}/${key.split("/").map(awsEncode).join("/")}`;
-  const params = [
-    ["X-Amz-Algorithm", "AWS4-HMAC-SHA256"],
-    ["X-Amz-Content-Sha256", "UNSIGNED-PAYLOAD"],
-    ["X-Amz-Credential", credential],
-    ["X-Amz-Date", amzDate],
-    ["X-Amz-Expires", String(expiresIn)],
-    ["X-Amz-SignedHeaders", "host"]
-  ];
-  const canonicalQueryString = params
-    .map(([name, value]) => `${awsEncode(name)}=${awsEncode(value)}`)
-    .join("&");
-  const canonicalRequest = [
-    "PUT",
-    canonicalUri,
-    canonicalQueryString,
-    `host:${host}\n`,
-    "host",
-    "UNSIGNED-PAYLOAD"
-  ].join("\n");
-  const stringToSign = [
-    "AWS4-HMAC-SHA256",
-    amzDate,
-    credentialScope,
-    await sha256Hex(canonicalRequest)
-  ].join("\n");
-  const signingKey = await getSigningKey(env.R2_SECRET_ACCESS_KEY, dateStamp);
-  const signatureBytes = await hmacRaw(signingKey, stringToSign);
-  const signature = [...signatureBytes].map((byte) => byte.toString(16).padStart(2, "0")).join("");
-
-  return `https://${host}${canonicalUri}?${canonicalQueryString}&X-Amz-Signature=${signature}`;
+  return getSignedUrl(createR2Client(env), command, { expiresIn });
 }

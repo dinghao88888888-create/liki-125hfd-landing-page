@@ -28,6 +28,7 @@ export async function onRequestPost({ request, env }) {
         env,
         bucket: "liki-upload",
         key,
+        contentType: file.type || "application/octet-stream",
         expiresIn: 3600
       });
 

@@ -85,6 +85,7 @@ export async function createR2PresignedPutUrl({ env, bucket, key, expiresIn = 36
   const canonicalUri = `/${awsEncode(bucket)}/${key.split("/").map(awsEncode).join("/")}`;
   const params = [
     ["X-Amz-Algorithm", "AWS4-HMAC-SHA256"],
+    ["X-Amz-Content-Sha256", "UNSIGNED-PAYLOAD"],
     ["X-Amz-Credential", credential],
     ["X-Amz-Date", amzDate],
     ["X-Amz-Expires", String(expiresIn)],

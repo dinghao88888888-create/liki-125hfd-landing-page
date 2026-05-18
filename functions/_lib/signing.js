@@ -54,6 +54,7 @@ function createR2Client(env) {
     region: "auto",
     endpoint: `https://${env.R2_ACCOUNT_ID}.r2.cloudflarestorage.com`,
     forcePathStyle: true,
+    requestChecksumCalculation: "WHEN_REQUIRED",
     credentials: {
       accessKeyId: env.R2_ACCESS_KEY_ID,
       secretAccessKey: env.R2_SECRET_ACCESS_KEY

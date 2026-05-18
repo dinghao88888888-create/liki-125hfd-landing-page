@@ -145,14 +145,12 @@
         if (!form.reportValidity()) return;
 
         const errorBox = form.querySelector("[data-inquiry-error]");
-        const successBox = form.querySelector("[data-inquiry-success]");
         const submitButton = form.querySelector("[data-submit-button]");
         const fileInput = form.querySelector("[data-file-input]");
         const files = fileInput ? [...fileInput.files] : [];
         const fields = collectFields(form);
 
         show(errorBox, false);
-        show(successBox, false);
 
         try {
           current.isSubmitting = true;
@@ -176,8 +174,8 @@
 
           form.reset();
           setProgress(form, uploadedFiles.length ? 100 : 0, uploadedFiles.length ? "Upload complete" : "No files uploaded");
-          show(successBox, true);
           form.dispatchEvent(new CustomEvent("inquiry-success", { bubbles: true }));
+          window.location.href = "/thank-you/";
         } catch (error) {
           setProgress(form, 0, "Upload failed");
           setText(errorBox, error.message || "Submission failed. Please try again.");

@@ -1,6 +1,7 @@
 ---
 import CTAButton from "../components/CTAButton.astro";
 import FloatingNav from "../components/FloatingNav.astro";
+import GoogleAnalytics from "../components/GoogleAnalytics.astro";
 import ImageBlock from "../components/ImageBlock.astro";
 import InquiryClientScript from "../components/InquiryClientScript.astro";
 import InquiryForm from "../components/InquiryForm.astro";
@@ -420,6 +421,7 @@ const schema = {
     <meta name="twitter:title" content={title} />
     <meta name="twitter:description" content={description} />
     <meta name="twitter:image" content={heroImageUrl} />
+    <GoogleAnalytics />
     <script type="application/ld+json" set:html={JSON.stringify(schema)}></script>
   </head>
   <body data-floating-nav-open="true">

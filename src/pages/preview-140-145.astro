@@ -10,10 +10,12 @@ import { images } from "../data/sections.js";
 import "../styles/global.css";
 
 const title =
-  "LIKI Ultra-Large Folding Door Systems | 140 and 145 Architectural Folding Doors";
+  "Ultra-Large Folding Glass Door Systems | LIKI";
 const description =
-  "LIKI 140 and 145 ultra-large folding door systems for coastal villas, luxury residences, penthouses, and expansive architectural openings. Up to 1,033 ft2 / 96 m2 opening area with thermal break profiles, BRIO hardware, HOPPE handles, and project-specific engineering support.";
-const canonical = "https://125hfd.likisystems.com/preview-140-145/";
+  "Explore LIKI 140 and 145 heavy-duty folding glass door systems for luxury homes, large openings, architects, builders, and custom projects.";
+const siteUrl = "https://folding-glass-doors.likisystems.com";
+const canonical = `${siteUrl}/`;
+const heroImageUrl = `${siteUrl}/images/optimized/liki-125hfd-hero-folding-glass-wall-luxury-villa.webp`;
 
 const navItems = [
   ["Overview", "#overview"],
@@ -370,7 +372,8 @@ const schema = {
   },
   description,
   category: "Ultra-large aluminum folding door system",
-  image: canonical + "images/optimized/liki-125hfd-hero-folding-glass-wall-luxury-villa.webp",
+  url: canonical,
+  image: heroImageUrl,
   additionalProperty: [
     {
       "@type": "PropertyValue",
@@ -414,11 +417,11 @@ const schema = {
     <meta property="og:title" content={title} />
     <meta property="og:description" content={description} />
     <meta property="og:url" content={canonical} />
-    <meta property="og:image" content={`${canonical}images/optimized/liki-125hfd-hero-folding-glass-wall-luxury-villa.webp`} />
+    <meta property="og:image" content={heroImageUrl} />
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:title" content={title} />
     <meta name="twitter:description" content={description} />
-    <meta name="twitter:image" content={`${canonical}images/optimized/liki-125hfd-hero-folding-glass-wall-luxury-villa.webp`} />
+    <meta name="twitter:image" content={heroImageUrl} />
     <script type="application/ld+json" set:html={JSON.stringify(schema)}></script>
   </head>
   <body data-floating-nav-open="true">
@@ -470,7 +473,7 @@ const schema = {
         <div class="container hook-strip__grid">
           {hookCards.map((item) => (
             <article class="hook-card">
-              <h2>{item.title}</h2>
+              <h3>{item.title}</h3>
               <p>{item.text}</p>
               {item.proof && <strong>{item.proof}</strong>}
             </article>
@@ -4395,10 +4398,14 @@ const schema = {
     border: 1px solid var(--line);
   }
 
-  .hook-card h2 {
+  .hook-card h3 {
+    margin: 0;
     max-width: 100%;
     color: var(--warm);
+    font-family: Georgia, "Times New Roman", serif;
     font-size: clamp(1.45rem, 2vw, 2.1rem);
+    font-weight: 500;
+    letter-spacing: 0;
     line-height: 1.08;
   }
 

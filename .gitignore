@@ -11,3 +11,16 @@ yarn-debug.log*
 yarn-error.log*
 .env
 .env.*
+# Local design/source assets
+public/images/Project/
+public/images/Process/
+public/images/Cert/
+public/images/opening-showcase/
+public/images/showcase/
+
+public/images/Bespoke sizing.png
+public/images/engineering-trust-hero.png
+public/images/favicon.png
+
+# Temporary files
+tmp/

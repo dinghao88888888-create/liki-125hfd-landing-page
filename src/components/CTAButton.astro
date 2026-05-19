@@ -3,10 +3,9 @@ import { SITE } from "../data/site.js";
 
 const {
   label = "Get a Project Quote",
-  variant = "primary"
+  variant = "primary",
+  href = `mailto:${SITE.email}?subject=LIKI%20125HFD%20Folding%20Glass%20Wall%20Inquiry`
 } = Astro.props;
-
-const href = `mailto:${SITE.email}?subject=LIKI%20125HFD%20Folding%20Glass%20Wall%20Inquiry`;
 ---
 
 <a class:list={["cta-button", `cta-button--${variant}`]} href={href}>{label}</a>

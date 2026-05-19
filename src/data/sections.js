@@ -1,6 +1,6 @@
 export const images = {
   hero: {
-    src: "/images/liki-125hfd-hero-folding-glass-wall-luxury-villa.png",
+    src: "/images/optimized/liki-125hfd-hero-folding-glass-wall-luxury-villa.webp",
     alt: "LIKI 125HFD heavy-duty folding glass wall fully opened in a luxury North American villa",
     width: 2400,
     height: 1350
@@ -48,13 +48,13 @@ export const images = {
     height: 1080
   },
   panoramic: {
-    src: "/images/liki-125hfd-panoramic-living-space.png",
+    src: "/images/optimized/liki-125hfd-panoramic-living-space.webp",
     alt: "Panoramic living room opened to pool deck with folding glass walls",
     width: 1920,
     height: 1080
   },
   kitchen: {
-    src: "/images/liki-125hfd-alfresco-kitchen-dining.png",
+    src: "/images/optimized/liki-125hfd-alfresco-kitchen-dining.webp",
     alt: "Modern kitchen and dining area connected to backyard deck with folding glass wall",
     width: 1920,
     height: 1080
@@ -72,7 +72,7 @@ export const images = {
     height: 1080
   },
   factory: {
-    src: "/images/liki-125hfd-factory-production-line.png",
+    src: "/images/optimized/liki-125hfd-factory-production-line.webp",
     alt: "Aluminum folding glass wall manufacturing facility with CNC production line",
     width: 1920,
     height: 1080
@@ -84,19 +84,19 @@ export const images = {
     height: 1200
   },
   homeowners: {
-    src: "/images/liki-125hfd-homeowners-value.png",
+    src: "/images/optimized/liki-125hfd-homeowners-value.webp",
     alt: "Luxury home upgraded with custom aluminum folding glass walls",
     width: 1920,
     height: 1080
   },
   builders: {
-    src: "/images/liki-125hfd-builders-installation.png",
+    src: "/images/optimized/liki-125hfd-builders-installation.webp",
     alt: "Builder installation of custom aluminum folding glass wall on luxury job site",
     width: 1920,
     height: 1080
   },
   architects: {
-    src: "/images/liki-125hfd-architect-design-studio.png",
+    src: "/images/optimized/liki-125hfd-architect-design-studio.webp",
     alt: "Architectural studio designing a custom folding glass wall facade",
     width: 1600,
     height: 1200
@@ -132,7 +132,7 @@ export const images = {
     height: 1080
   },
   finalCta: {
-    src: "/images/liki-125hfd-final-cta-dream-home.png",
+    src: "/images/optimized/liki-125hfd-final-cta-dream-home.webp",
     alt: "Modern dream home with folding glass walls for final CTA section",
     width: 1920,
     height: 1080

@@ -944,6 +944,7 @@ details p {
 }
 
 .popup-field input,
+.popup-field select,
 .popup-field textarea {
   width: 100%;
   min-height: 46px;
@@ -964,12 +965,30 @@ details p {
   resize: vertical;
 }
 
+.popup-field select {
+  color: #f8f5ed;
+  background-color: rgba(251, 248, 240, 0.08);
+  color-scheme: dark;
+}
+
+.popup-field select option {
+  background-color: #ffffff;
+  color: #111827;
+}
+
+.popup-field select option:checked,
+.popup-field select option:hover {
+  background-color: #e6d6b8;
+  color: #111827;
+}
+
 .popup-field input::placeholder,
 .popup-field textarea::placeholder {
   color: rgba(248, 245, 237, 0.5);
 }
 
 .popup-field input:focus,
+.popup-field select:focus,
 .popup-field textarea:focus {
   border-color: var(--bronze);
   background: rgba(251, 248, 240, 0.12);

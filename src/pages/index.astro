@@ -181,7 +181,7 @@ const systemCards = [
       "Luxury Indoor-Outdoor Transitions"
     ],
     cta: "I Prefer LIKI 140",
-    preference: "LIKI 140",
+    preference: "LIKI 140 Folding Glass Wall",
     formTitle: "Discuss Your LIKI 140 Project",
     specs: [
       ["Frame depth", "140mm"],
@@ -209,7 +209,7 @@ const systemCards = [
       "Ultra-Large Panoramic Systems"
     ],
     cta: "I Prefer LIKI 145",
-    preference: "LIKI 145",
+    preference: "LIKI 145 Folding Glass Wall",
     formTitle: "Plan Your Monumental Opening",
     specs: [
       ["Frame depth", "145mm"],
@@ -1667,12 +1667,12 @@ const schema = {
         source="LIKI 140 / 145 Ultra-Large Folding Door Systems Preview"
         subject="LIKI 140 / 145 Folding Door Systems Inquiry"
         systemOptions={[
-          "LIKI 140 Folding Door System",
-          "LIKI 145 Folding Door System",
-          "Not Sure Yet - Need System Recommendation",
-          "90-degree Open Corner",
-          "Coastal Villa Project",
-          "Penthouse / Hospitality Project"
+          "LIKI 140 Folding Glass Wall",
+          "LIKI 145 Folding Glass Wall",
+          "90° Open Corner",
+          "Zero-Threshold System",
+          "Integrated Insect Screen",
+          "Not Sure Yet"
         ]}
       />
 
@@ -1984,22 +1984,14 @@ const schema = {
 
         const setPreference = (system, formTitle) => {
           hiddenPreference.value = system;
-          if (visibleSystem) {
-            const matchingOption = [...visibleSystem.options].find((option) =>
-              option.textContent?.startsWith(system)
-            );
-            if (matchingOption) visibleSystem.value = matchingOption.value;
-          }
+          if (visibleSystem) visibleSystem.value = system;
           if (quoteTitle && formTitle) quoteTitle.textContent = formTitle;
         };
 
         visibleSystem?.addEventListener("change", () => {
-          const selected = visibleSystem.value.includes("LIKI 140")
-            ? "LIKI 140"
-            : visibleSystem.value.includes("LIKI 145")
-              ? "LIKI 145"
-              : "";
-          hiddenPreference.value = selected;
+          hiddenPreference.value = visibleSystem.value.includes("LIKI")
+            ? visibleSystem.value
+            : "";
         });
 
         triggers.forEach((trigger) => {

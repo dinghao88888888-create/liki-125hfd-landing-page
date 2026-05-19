@@ -1,5 +1,21 @@
 ---
 import { SITE } from "../data/site.js";
+
+const {
+  eyebrow = "Project review",
+  title = "Planning a Folding Glass Wall Project?",
+  lead = "Send us your opening size and project location. Our team will review your requirements and recommend the right LIKI 125HFD configuration.",
+  source = "LIKI 125HFD Landing Page Popup",
+  subject = "LIKI 125HFD Popup Inquiry",
+  systemOptions = [
+    "LIKI 140 Folding Glass Wall",
+    "LIKI 145 Folding Glass Wall",
+    "90° Open Corner",
+    "Zero-Threshold System",
+    "Integrated Insect Screen",
+    "Not Sure Yet"
+  ]
+} = Astro.props;
 ---
 
 <div class="popup-inquiry" data-popup-inquiry hidden>
@@ -15,19 +31,16 @@ import { SITE } from "../data/site.js";
       <span aria-hidden="true">&times;</span>
     </button>
 
-    <p class="eyebrow">Project review</p>
-    <h2 id="popup-inquiry-title">Planning a Folding Glass Wall Project?</h2>
-    <p class="popup-inquiry__lead">
-      Send us your opening size and project location. Our team will review your
-      requirements and recommend the right LIKI 125HFD configuration.
-    </p>
+    <p class="eyebrow">{eyebrow}</p>
+    <h2 id="popup-inquiry-title">{title}</h2>
+    <p class="popup-inquiry__lead">{lead}</p>
 
     <form
       class="popup-inquiry__form"
       data-popup-form
       data-inquiry-form
-      data-inquiry-source="LIKI 125HFD Landing Page Popup"
-      data-inquiry-subject="LIKI 125HFD Popup Inquiry"
+      data-inquiry-source={source}
+      data-inquiry-subject={subject}
     >
       <div class="popup-field">
         <label for="popup-full-name">Full Name *</label>
@@ -52,6 +65,13 @@ import { SITE } from "../data/site.js";
       <div class="popup-field popup-field--full">
         <label for="popup-opening-size">Opening Size</label>
         <input id="popup-opening-size" name="Opening Size" type="text" placeholder="Example: 18 ft W x 9 ft H" />
+      </div>
+
+      <div class="popup-field popup-field--full">
+        <label for="popup-interested-system">Interested System</label>
+        <select id="popup-interested-system" name="Interested System">
+          {systemOptions.map((option) => <option>{option}</option>)}
+        </select>
       </div>
 
       <div class="popup-field popup-field--full">

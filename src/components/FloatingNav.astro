@@ -1,19 +1,20 @@
 ---
-const navItems = [
-  ["Overview", "#overview"],
-  ["Living", "#open-living"],
-  ["Features", "#features"],
-  ["Custom", "#custom"],
+const defaultNavItems = [
+  ["Why LIKI", "#open-living"],
+  ["140 vs 145", "#systems"],
+  ["Key Features", "#features"],
   ["Engineering", "#engineering"],
-  ["Delivery", "#delivery"],
-  ["FAQ", "#faq"],
+  ["Process", "#process"],
+  ["Projects", "#projects"],
   ["Quote", "#quote"]
 ];
+
+const { items = defaultNavItems } = Astro.props;
 ---
 
 <nav class="floating-nav" aria-label="Section navigation">
   <span class="floating-nav__title">Explore</span>
-  {navItems.map(([label, href]) => (
+  {items.map(([label, href]) => (
     <a href={href} aria-label={label}>
       <span class="dot" aria-hidden="true"></span>
       <span class="label">{label}</span>
@@ -24,3 +25,69 @@ const navItems = [
     <span class="label">Top</span>
   </a>
 </nav>
+
+<script>
+  (() => {
+    const navs = document.querySelectorAll(".floating-nav");
+    if (!navs.length) return;
+
+    navs.forEach((nav) => {
+      const links = Array.from(nav.querySelectorAll('a[href^="#"]'));
+      const sectionLinks = links.filter((link) => link.getAttribute("href") !== "#top");
+      const targets = sectionLinks
+        .map((link) => {
+          const href = link.getAttribute("href");
+          return href ? { href, target: document.querySelector(href) } : null;
+        })
+        .filter((item) => item?.target);
+
+      const setCurrent = (href) => {
+        links.forEach((link) => {
+          if (link.getAttribute("href") === href) {
+            link.setAttribute("aria-current", "true");
+          } else {
+            link.removeAttribute("aria-current");
+          }
+        });
+      };
+
+      const updateCurrent = () => {
+        if (window.scrollY < 120) {
+          setCurrent("#top");
+          return;
+        }
+
+        const activationLine = window.innerHeight * 0.36;
+        let activeHref = targets[0]?.href || "";
+
+        targets.forEach(({ href, target }) => {
+          const rect = target.getBoundingClientRect();
+          if (rect.top <= activationLine) activeHref = href;
+        });
+
+        if (activeHref) setCurrent(activeHref);
+      };
+
+      let ticking = false;
+      const requestUpdate = () => {
+        if (ticking) return;
+        ticking = true;
+        window.requestAnimationFrame(() => {
+          updateCurrent();
+          ticking = false;
+        });
+      };
+
+      links.forEach((link) => {
+        link.addEventListener("click", () => {
+          const href = link.getAttribute("href");
+          if (href) setCurrent(href);
+        });
+      });
+
+      updateCurrent();
+      window.addEventListener("scroll", requestUpdate, { passive: true });
+      window.addEventListener("resize", requestUpdate);
+    });
+  })();
+</script>

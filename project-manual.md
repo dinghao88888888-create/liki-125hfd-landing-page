@@ -1,6 +1,6 @@
 # LIKI 140 / 145 Landing Page - Long-term AI Project Manual
 
-Last updated: 2026-05-19
+Last updated: 2026-05-20
 
 This document is the long-term working manual for the LIKI folding glass doors advertising landing page. It is intended for future AI assistants, developers, and non-technical collaborators who need to continue the project across multiple chats, deployment stages, and advertising tracking work.
 
@@ -69,8 +69,10 @@ LIKI positioning:
 - Main form and popup form `Interested System` options no longer focus on 125HFD; they now use LIKI 140, LIKI 145, and related project options.
 - GA4 has been installed with Measurement ID `G-VTK5YEKDW9`.
 - Google Ads Inquiry Form Submission conversion has been set up based on `/thank-you/`.
+- Google Ads base AW config has been added with Conversion ID `AW-18111406135`.
 - WhatsApp Click conversion has been set up with `send_to: AW-18111406135/RXykCKC36q8cELfAmLxD`.
 - WhatsApp click tracking is live and listens for `a[href*="wa.me"]`.
+- Email Click conversion has been implemented with `send_to: AW-18111406135/O4Q4CM7skbAcELfAmLxD`, but Google Ads testing has not detected it successfully yet.
 - `.gitignore` has been cleaned to reduce local design/source asset noise.
 - GitHub `main` has been synchronized, and Cloudflare Pages automatic deployment is normal.
 
@@ -115,23 +117,54 @@ Compatibility notes:
 - Middle-click, new-window behavior, and existing `target="_blank"` behavior are preserved.
 - No duplicate Google tag base script should be added.
 
+### Email Click Conversion Flow
+
+Current Email Click conversion path:
+
+1. User clicks a direct email link matching `a[href^="mailto:info@likisystems.com"]`.
+2. `src/components/GoogleAnalytics.astro` detects the click.
+3. For ordinary left-clicks, the script briefly prevents the default mailto navigation, fires the Google Ads conversion event, then opens the original `mailto:` link through `event_callback` or an approximately 800ms fallback timeout.
+4. For Ctrl, Meta, Shift, Alt, middle-click, or other non-left-click behavior, the script does not intercept and browser defaults remain untouched.
+
+Current implementation:
+
+```js
+gtag("event", "conversion", {
+  send_to: "AW-18111406135/O4Q4CM7skbAcELfAmLxD",
+  value: 50.0,
+  currency: "USD",
+  event_callback: openMailto
+});
+```
+
+Important status:
+
+- The `mailto:info@likisystems.com` link opens the user's mail client normally.
+- The code includes `event_callback` and a fallback timeout to avoid losing the conversion request during immediate `mailto:` handoff.
+- As of 2026-05-20, Google Ads testing still did not successfully detect the Email Click conversion.
+- Do not treat Email Click as verified until Google Ads records it successfully.
+- Future troubleshooting should focus on Google Ads / tag diagnostics for this specific conversion action, not on changing form logic, Cloudflare Functions, Resend, R2, or page layout.
+
 ### Google Analytics and Ads Tracking
 
 GA4 base tracking:
 
 - File: `src/components/GoogleAnalytics.astro`
 - Measurement ID: `G-VTK5YEKDW9`
+- Google Ads Conversion ID: `AW-18111406135`
 - Installed through page head injection on the current Astro pages.
 
 Google Ads conversions:
 
 - Inquiry Form Submission: based on successful redirect to `/thank-you/`.
 - WhatsApp Click: fired from `GoogleAnalytics.astro` when users click links matching `a[href*="wa.me"]`.
+- Email Click: fired from `GoogleAnalytics.astro` when users click links matching `a[href^="mailto:info@likisystems.com"]`, but not yet verified by Google Ads.
 
 Current verification stage:
 
-- Confirm Google Ads Inquiry Form Submission conversion records formally.
-- Confirm WhatsApp Click conversion records formally.
+- Google Ads Inquiry Form Submission conversion is effective.
+- WhatsApp Click conversion is effective.
+- Email Click conversion is implemented but currently not detected successfully by Google Ads.
 - Continue GA4 event system refinement later.
 
 ## 3. Current Architecture
@@ -201,7 +234,10 @@ Removed service:
 
 - `src/components/GoogleAnalytics.astro`
   - Contains the GA4 base Google tag.
+  - Contains Google Ads AW config for `AW-18111406135`.
+  - Contains `/thank-you/` Inquiry Form Submission conversion tracking.
   - Contains WhatsApp Click Google Ads conversion tracking.
+  - Contains Email Click Google Ads conversion tracking for `mailto:info@likisystems.com`.
   - Do not duplicate Google tag code elsewhere.
 
 ### Components
@@ -365,16 +401,18 @@ Future:
 
 Priority order:
 
-1. Verify Google Ads Inquiry Form Submission conversion is formally recording.
-2. Verify WhatsApp Click conversion is formally recording.
+1. Troubleshoot Email Click conversion until Google Ads detects it successfully.
+2. Monitor Google Ads Inquiry Form Submission and WhatsApp Click conversion health.
 3. Monitor production inquiry submissions and Resend delivery.
 4. Keep GA4 and Google Ads base tracking stable.
 5. Add a more complete GA4 custom event system later if useful.
 
 TODO:
 
-- Verify Google Ads Inquiry conversion is officially recorded.
-- Verify WhatsApp Click conversion is officially recorded.
+- Diagnose why Google Ads still does not detect Email Click conversion.
+- Keep Email Click `event_callback` + fallback timeout behavior unless a verified better approach is chosen.
+- Continue monitoring Google Ads Inquiry conversion.
+- Continue monitoring WhatsApp Click conversion.
 - Later improve GA4 custom events.
 - Later consider Enhanced Conversions.
 - Later consider Cloudflare Turnstile for spam protection.
@@ -393,8 +431,10 @@ Current state:
 - SEO metadata and production social image URLs have been corrected.
 - Inquiry form submissions redirect to `/thank-you/`.
 - GA4 is installed with `G-VTK5YEKDW9`.
-- Google Ads inquiry conversion is based on `/thank-you/`.
-- WhatsApp click conversion is implemented in `GoogleAnalytics.astro`.
+- Google Ads AW config is installed with `AW-18111406135`.
+- Google Ads Inquiry Form Submission conversion is based on `/thank-you/` and has tested effective.
+- WhatsApp Click conversion is implemented in `GoogleAnalytics.astro` and has tested effective.
+- Email Click conversion is implemented in `GoogleAnalytics.astro`, uses `event_callback` plus a fallback timeout, but Google Ads testing has not succeeded yet.
 - GitHub `main` and Cloudflare Pages deployment are synchronized.
 
 GitHub repository:
@@ -406,7 +446,8 @@ https://github.com/dinghao88888888-create/liki-125hfd-landing-page.git
 Notes for future AI continuation:
 
 - Treat the production inquiry flow as working unless new evidence shows otherwise.
-- Treat Google Ads conversions as implemented but still needing formal Ads-side verification.
+- Treat Inquiry Form Submission and WhatsApp Click conversions as implemented and effective.
+- Treat Email Click conversion as implemented but not yet Google Ads verified.
 - Treat file upload as intentionally disabled and separate from the current launch path.
 - Do not re-enable upload UI unless the user explicitly asks to resume R2 upload work.
 - Keep using `.git-clean` for all Git operations.

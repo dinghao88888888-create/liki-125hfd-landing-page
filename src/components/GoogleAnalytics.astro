@@ -30,4 +30,22 @@
       currency: "USD"
     });
   });
+
+  document.addEventListener("click", (event) => {
+    const target = event.target;
+    const link =
+      target instanceof Element
+        ? target.closest('a[href^="mailto:info@likisystems.com"]')
+        : null;
+
+    if (!link || typeof gtag !== "function") {
+      return;
+    }
+
+    gtag("event", "conversion", {
+      send_to: "AW-18111406135/O4Q4CM7skbAcELfAmLxD",
+      value: 50.0,
+      currency: "USD"
+    });
+  });
 </script>

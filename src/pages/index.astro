@@ -440,14 +440,24 @@ const schema = {
     <WhatsAppButton />
     <main id="top">
       <section class="hero" id="overview" aria-labelledby="hero-title">
-        <ImageBlock
-          className="hero__image"
-          src={images.hero.src}
-          alt="LIKI ultra-large folding door system opened across a luxury villa living space"
-          width={images.hero.width}
-          height={images.hero.height}
-          loading="eager"
-        />
+        <picture class="hero__image">
+          <source
+            media="(max-width: 640px)"
+            srcset="/images/optimized/liki-125hfd-hero-folding-glass-wall-mobile.webp"
+          />
+          <source
+            media="(max-width: 1024px)"
+            srcset="/images/optimized/liki-125hfd-hero-folding-glass-wall-tablet.webp"
+          />
+          <img
+            src={images.hero.src}
+            alt="LIKI ultra-large folding door system opened across a luxury villa living space"
+            width={images.hero.width}
+            height={images.hero.height}
+            loading="eager"
+            decoding="async"
+          />
+        </picture>
         <div class="hero__overlay"></div>
         <div class="hero__content container">
           <p class="eyebrow">LIKI Ultra-Large Folding Door Systems</p>

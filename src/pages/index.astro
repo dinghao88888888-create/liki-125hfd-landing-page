@@ -5,6 +5,7 @@ import GoogleAnalytics from "../components/GoogleAnalytics.astro";
 import ImageBlock from "../components/ImageBlock.astro";
 import InquiryClientScript from "../components/InquiryClientScript.astro";
 import InquiryForm from "../components/InquiryForm.astro";
+import MicrosoftClarity from "../components/MicrosoftClarity.astro";
 import PopupInquiryForm from "../components/PopupInquiryForm.astro";
 import WhatsAppButton from "../components/WhatsAppButton.astro";
 import { images } from "../data/sections.js";
@@ -422,6 +423,7 @@ const schema = {
     <meta name="twitter:description" content={description} />
     <meta name="twitter:image" content={heroImageUrl} />
     <GoogleAnalytics />
+    <MicrosoftClarity />
     <script type="application/ld+json" set:html={JSON.stringify(schema)}></script>
   </head>
   <body data-floating-nav-open="true">

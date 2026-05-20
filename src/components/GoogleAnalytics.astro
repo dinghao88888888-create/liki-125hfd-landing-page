@@ -6,6 +6,15 @@
   }
   gtag("js", new Date());
   gtag("config", "G-VTK5YEKDW9");
+  gtag("config", "AW-18111406135");
+
+  if (window.location.pathname.replace(/\/$/, "") === "/thank-you") {
+    gtag("event", "conversion", {
+      send_to: "AW-18111406135/9S2fCKim6a8cELfAmLxD",
+      value: 100.0,
+      currency: "USD"
+    });
+  }
 
   document.addEventListener("click", (event) => {
     const target = event.target;

@@ -38,14 +38,47 @@
         ? target.closest('a[href^="mailto:info@likisystems.com"]')
         : null;
 
-    if (!link || typeof gtag !== "function") {
+    if (
+      !link ||
+      event.button !== 0 ||
+      event.ctrlKey ||
+      event.metaKey ||
+      event.shiftKey ||
+      event.altKey
+    ) {
+      return;
+    }
+
+    const href = link.getAttribute("href");
+
+    if (!href) {
+      return;
+    }
+
+    event.preventDefault();
+
+    let didOpen = false;
+    const openMailto = () => {
+      if (didOpen) {
+        return;
+      }
+
+      didOpen = true;
+      window.location.href = href;
+    };
+
+    window.setTimeout(openMailto, 800);
+
+    if (typeof gtag !== "function") {
+      openMailto();
       return;
     }
 
     gtag("event", "conversion", {
       send_to: "AW-18111406135/O4Q4CM7skbAcELfAmLxD",
       value: 50.0,
-      currency: "USD"
+      currency: "USD",
+      event_callback: openMailto
     });
   });
 </script>

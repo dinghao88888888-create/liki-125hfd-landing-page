@@ -8,6 +8,7 @@ import InquiryForm from "../components/InquiryForm.astro";
 import MicrosoftClarity from "../components/MicrosoftClarity.astro";
 import PopupInquiryForm from "../components/PopupInquiryForm.astro";
 import WhatsAppButton from "../components/WhatsAppButton.astro";
+import { SITE } from "../data/site.js";
 import { images } from "../data/sections.js";
 import "../styles/global.css";
 
@@ -20,14 +21,17 @@ const canonical = `${siteUrl}/`;
 const heroImageUrl = `${siteUrl}/images/optimized/liki-125hfd-hero-folding-glass-wall-luxury-villa.webp`;
 
 const navItems = [
-  ["Why LIKI", "#open-living"],
+  ["Fit Check", "#fit"],
   ["140 vs 145", "#systems"],
+  ["Projects", "#projects"],
+  ["Send Details", "#quick-inquiry"],
   ["Key Features", "#features"],
   ["Engineering", "#engineering"],
   ["Process", "#process"],
-  ["Projects", "#projects"],
   ["Quote", "#quote"]
 ];
+
+const whatsappHref = `https://wa.me/${SITE.whatsappNumber}?text=${encodeURIComponent(SITE.whatsappMessage)}`;
 
 const featureCornerSlides = [
   {
@@ -180,7 +184,7 @@ const systemCards = [
       "Elegant Family Living",
       "Luxury Indoor-Outdoor Transitions"
     ],
-    cta: "I Prefer LIKI 140",
+    cta: "Send Project Details",
     preference: "LIKI 140 Folding Glass Wall",
     formTitle: "Discuss Your LIKI 140 Project",
     specs: [
@@ -208,7 +212,7 @@ const systemCards = [
       "Pavilion-Scale Glazing",
       "Ultra-Large Panoramic Systems"
     ],
-    cta: "I Prefer LIKI 145",
+    cta: "Send Project Details",
     preference: "LIKI 145 Folding Glass Wall",
     formTitle: "Plan Your Monumental Opening",
     specs: [
@@ -438,6 +442,11 @@ const schema = {
       ×
     </button>
     <WhatsAppButton />
+    <nav class="mobile-sticky-cta" aria-label="Mobile project actions">
+      <a class="mobile-sticky-cta__primary" href="#systems">View Systems</a>
+      <a href="#quick-inquiry">Send Project Details</a>
+      <a href={whatsappHref} target="_blank" rel="noopener noreferrer">WhatsApp</a>
+    </nav>
     <main id="top">
       <section class="hero" id="overview" aria-labelledby="hero-title">
         <picture class="hero__image">
@@ -461,11 +470,11 @@ const schema = {
         <div class="hero__overlay"></div>
         <div class="hero__content container">
           <p class="eyebrow">LIKI Ultra-Large Folding Door Systems</p>
-          <h1 id="hero-title">Heavy-Duty Folding Glass Walls Built Around Your Opening</h1>
+          <h1 id="hero-title">Find the Right Folding Glass System</h1>
           <p class="hero__lead">
-            Custom aluminum folding glass wall systems for North American luxury
-            homes, architects, and builders — with large panels, open-corner options,
-            flush thresholds, and factory-backed engineering support.
+            Compare LIKI 140 and LIKI 145 folding glass wall systems for large
+            openings in US and Canada luxury homes, architect-led builds, and
+            premium projects.
           </p>
           <ul class="hero-bullets">
             <li>Custom-built to your opening size</li>
@@ -475,9 +484,240 @@ const schema = {
             <li>Project support from drawings to delivery</li>
           </ul>
           <div class="hero__actions">
-            <CTAButton label="Get a Project Quote" href="#quote" />
-            <CTAButton label="View Systems" href="#systems" variant="secondary" />
+            <CTAButton label="View Systems" href="#systems" />
+            <CTAButton label="Send Project Details" href="#quick-inquiry" variant="secondary" />
           </div>
+        </div>
+      </section>
+
+      <section class="section section--dark project-fit" id="fit" aria-labelledby="fit-title">
+        <div class="container project-fit__inner">
+          <div class="section__intro project-fit__intro">
+            <p class="eyebrow">PROJECT FIT CHECK</p>
+            <h2 id="fit-title">Is LIKI Right for Your Project?</h2>
+            <p>
+              LIKI is designed for custom large-opening projects where system
+              selection, opening size, and engineering review matter before
+              production.
+            </p>
+          </div>
+          <div class="project-fit__grid">
+            <article class="project-fit__card">
+              <h3>Good fit</h3>
+              <ul>
+                <li>Large residential or commercial exterior openings</li>
+                <li>Custom luxury homes, hospitality, coastal, or premium projects</li>
+                <li>Architect, builder, developer, or owner-led projects</li>
+                <li>Need engineering review or shop drawing support</li>
+              </ul>
+            </article>
+            <article class="project-fit__card">
+              <h3>May not be the best fit</h3>
+              <ul>
+                <li>Standard patio door replacement</li>
+                <li>Low-budget DIY projects</li>
+                <li>Small interior room dividers</li>
+                <li>Looking only for screen doors or closet doors</li>
+              </ul>
+            </article>
+          </div>
+          <CTAButton label="View Systems" href="#systems" />
+        </div>
+      </section>
+
+      <section class="section section--dark system-comparison" id="systems" aria-labelledby="systems-title">
+        <div class="container">
+          <div class="section__intro">
+            <p class="eyebrow">140 vs 145 system comparison</p>
+            <h2 id="systems-title">Two High-Capacity Platforms for Different Architectural Ambitions</h2>
+            <p>
+              LIKI 140 and LIKI 145 share the same premium design intent: thermal
+              break aluminum profiles, fully tempered safety glass, BRIO hardware
+              options, HOPPE handles, and project-specific engineering review. The
+              difference is capacity.
+            </p>
+          </div>
+          <div class="system-comparison__grid">
+            {systemCards.map((system) => (
+              <article class={`system-card system-card--${system.code}`}>
+                <figure class="system-card__media">
+                  <img
+                    src={system.image.src}
+                    alt={system.image.alt}
+                    width="1920"
+                    height="1080"
+                    loading="lazy"
+                  />
+                  <figcaption>{system.world}</figcaption>
+                </figure>
+                <div class="system-card__body">
+                  <p class="system-card__position">{system.position}</p>
+                  <h3>{system.name}</h3>
+                  <p>{system.intro}</p>
+
+                  <div class="system-card__best" aria-label={`${system.name} best for`}>
+                    <span>Best For</span>
+                    <ul>
+                      {system.bestFor.map((item) => (
+                        <li><span aria-hidden="true"></span>{item}</li>
+                      ))}
+                    </ul>
+                  </div>
+
+                  <dl class="system-card__specs">
+                    {system.specs.map(([label, value]) => (
+                      <div>
+                        <dt>{label}</dt>
+                        <dd>{value}</dd>
+                      </div>
+                    ))}
+                  </dl>
+
+                  <a
+                    class="system-card__cta"
+                    href="#quick-inquiry"
+                    data-system-preference={system.preference}
+                    data-system-form-title={system.formTitle}
+                    aria-label={`${system.cta} and open the project inquiry form`}
+                  >
+                    {system.cta}
+                    <span aria-hidden="true">&rarr;</span>
+                  </a>
+                </div>
+              </article>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      <section class="section project-showcase" id="projects" aria-labelledby="showcase-title" data-project-showcase>
+        <div class="container project-showcase__inner">
+          <div class="project-showcase__header">
+            <p class="eyebrow project-showcase__label">Architectural Showcase</p>
+            <h2 id="showcase-title">Large Openings, Built Into Real Architecture.</h2>
+            <span class="project-showcase__rule" aria-hidden="true"></span>
+            <p>
+              Explore residential, hospitality, and commercial applications where
+              LIKI folding glass wall systems open rooms to views, terraces,
+              courtyards, and everyday use.
+            </p>
+          </div>
+
+          <div class="project-showcase__frame">
+            <div class="project-showcase__main">
+              <img
+                src={showcaseProjects[0].image}
+                alt={showcaseProjects[0].alt}
+                loading="lazy"
+                decoding="async"
+                data-showcase-main-image
+              />
+
+              <div class="project-showcase__pills" aria-label="Current project details">
+                <span data-showcase-loc>{showcaseProjects[0].loc}</span>
+                <span data-showcase-type>{showcaseProjects[0].type}</span>
+                <span data-showcase-feature>{showcaseProjects[0].feature}</span>
+              </div>
+
+              <div class="project-showcase__nav" aria-label="Project carousel controls">
+                <button type="button" aria-label="Previous project" data-showcase-prev>&lsaquo;</button>
+                <button type="button" aria-label="Next project" data-showcase-next>&rsaquo;</button>
+              </div>
+
+              <div class="project-showcase__caption">
+                <div>
+                  <h3 data-showcase-title>{showcaseProjects[0].title}</h3>
+                  <p data-showcase-text>{showcaseProjects[0].text}</p>
+                </div>
+                <span data-showcase-count>01 / {String(showcaseProjects.length).padStart(2, "0")}</span>
+              </div>
+            </div>
+
+            <div class="project-showcase__thumb-row">
+              <button type="button" class="project-showcase__thumb-arrow" aria-label="Previous thumbnails" data-showcase-thumbs-prev>&lsaquo;</button>
+              <div class="project-showcase__thumbs" aria-label="Project thumbnails">
+                {showcaseProjects.map((project, index) => (
+                  <button
+                    type="button"
+                    class:list={[
+                      "project-showcase__thumb",
+                      index === 0 && "is-active"
+                    ]}
+                    aria-label={`View ${project.title}`}
+                    aria-pressed={index === 0 ? "true" : "false"}
+                    hidden={index >= 5}
+                    data-showcase-thumb
+                    data-index={index}
+                    data-image={project.image}
+                    data-alt={project.alt}
+                    data-loc={project.loc}
+                    data-type={project.type}
+                    data-feature={project.feature}
+                    data-title={project.title}
+                    data-text={project.text}
+                    data-label={project.label}
+                  >
+                    <img src={project.image} alt="" loading="lazy" decoding="async" />
+                    <span>{project.label}</span>
+                  </button>
+                ))}
+              </div>
+              <button type="button" class="project-showcase__thumb-arrow" aria-label="Next thumbnails" data-showcase-thumbs-next>&rsaquo;</button>
+            </div>
+            <p class="project-showcase__note">Use the thumbnails to browse project references.</p>
+          </div>
+        </div>
+      </section>
+
+      <section class="section quick-inquiry" id="quick-inquiry" aria-labelledby="quick-inquiry-title">
+        <div class="container quick-inquiry__grid">
+          <div class="quick-inquiry__content">
+            <p class="eyebrow">Quick Project Review</p>
+            <h2 id="quick-inquiry-title">Get a System Review</h2>
+            <p>
+              Send the opening size, project location, and best contact method.
+              LIKI will review whether LIKI 140, LIKI 145, or another folding glass
+              wall configuration is the better fit.
+            </p>
+          </div>
+
+          <form
+            class="quick-inquiry__form"
+            data-inquiry-form
+            data-inquiry-source="LIKI 140 / 145 Quick System Recommendation"
+            data-inquiry-subject="LIKI 140 / 145 Quick System Recommendation"
+          >
+            <div class="quick-inquiry__field">
+              <label for="quick-name">Full Name *</label>
+              <input id="quick-name" name="Full Name" type="text" autocomplete="name" required />
+            </div>
+
+            <div class="quick-inquiry__field">
+              <label for="quick-contact">Work Email *</label>
+              <input id="quick-contact" name="Work Email" type="email" autocomplete="email" required />
+            </div>
+
+            <div class="quick-inquiry__field">
+              <label for="quick-location">Project Location *</label>
+              <input id="quick-location" name="Project Location" type="text" autocomplete="address-level2" required />
+            </div>
+
+            <div class="quick-inquiry__field">
+              <label for="quick-message">Message / Requirements *</label>
+              <textarea
+                id="quick-message"
+                name="Message / Requirements"
+                rows="4"
+                placeholder="Example: 22 ft wide x 9 ft high exterior opening, coastal home in Florida."
+                required
+              ></textarea>
+            </div>
+
+            <p class="form-error" data-inquiry-error hidden></p>
+            <button class="quick-inquiry__submit" type="submit" data-submit-button>
+              Send Project Details
+            </button>
+          </form>
         </div>
       </section>
 
@@ -745,71 +985,6 @@ const schema = {
                 <div>
                   <h3>{card.title}</h3>
                   <p>{card.description}</p>
-                </div>
-              </article>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      <section class="section section--dark system-comparison" id="systems" aria-labelledby="systems-title">
-        <div class="container">
-          <div class="section__intro">
-            <p class="eyebrow">140 vs 145 system comparison</p>
-            <h2 id="systems-title">Two High-Capacity Platforms for Different Architectural Ambitions</h2>
-            <p>
-              LIKI 140 and LIKI 145 share the same premium design intent: thermal
-              break aluminum profiles, fully tempered safety glass, BRIO hardware
-              options, HOPPE handles, and project-specific engineering review. The
-              difference is capacity.
-            </p>
-          </div>
-          <div class="system-comparison__grid">
-            {systemCards.map((system) => (
-              <article class={`system-card system-card--${system.code}`}>
-                <figure class="system-card__media">
-                  <img
-                    src={system.image.src}
-                    alt={system.image.alt}
-                    width="1920"
-                    height="1080"
-                    loading="lazy"
-                  />
-                  <figcaption>{system.world}</figcaption>
-                </figure>
-                <div class="system-card__body">
-                  <p class="system-card__position">{system.position}</p>
-                  <h3>{system.name}</h3>
-                  <p>{system.intro}</p>
-
-                  <div class="system-card__best" aria-label={`${system.name} best for`}>
-                    <span>Best For</span>
-                    <ul>
-                      {system.bestFor.map((item) => (
-                        <li><span aria-hidden="true"></span>{item}</li>
-                      ))}
-                    </ul>
-                  </div>
-
-                  <dl class="system-card__specs">
-                    {system.specs.map(([label, value]) => (
-                      <div>
-                        <dt>{label}</dt>
-                        <dd>{value}</dd>
-                      </div>
-                    ))}
-                  </dl>
-
-                  <a
-                    class="system-card__cta"
-                    href="#quote"
-                    data-system-preference={system.preference}
-                    data-system-form-title={system.formTitle}
-                    aria-label={`${system.cta} and open the project inquiry form`}
-                  >
-                    {system.cta}
-                    <span aria-hidden="true">&rarr;</span>
-                  </a>
                 </div>
               </article>
             ))}
@@ -1493,165 +1668,52 @@ const schema = {
         </div>
       </section>
 
-      <section class="section project-showcase" id="projects" aria-labelledby="showcase-title" data-project-showcase>
-        <div class="container project-showcase__inner">
-          <div class="project-showcase__header">
-            <p class="eyebrow project-showcase__label">Architectural Showcase</p>
-            <h2 id="showcase-title">Large Openings, Built Into Real Architecture.</h2>
-            <span class="project-showcase__rule" aria-hidden="true"></span>
-            <p>
-              Explore residential, hospitality, and commercial applications where
-              LIKI folding glass wall systems open rooms to views, terraces,
-              courtyards, and everyday use.
-            </p>
-          </div>
-
-          <div class="project-showcase__frame">
-            <div class="project-showcase__main">
-              <img
-                src={showcaseProjects[0].image}
-                alt={showcaseProjects[0].alt}
-                loading="lazy"
-                decoding="async"
-                data-showcase-main-image
-              />
-
-              <div class="project-showcase__pills" aria-label="Current project details">
-                <span data-showcase-loc>{showcaseProjects[0].loc}</span>
-                <span data-showcase-type>{showcaseProjects[0].type}</span>
-                <span data-showcase-feature>{showcaseProjects[0].feature}</span>
-              </div>
-
-              <div class="project-showcase__nav" aria-label="Project carousel controls">
-                <button type="button" aria-label="Previous project" data-showcase-prev>&lsaquo;</button>
-                <button type="button" aria-label="Next project" data-showcase-next>&rsaquo;</button>
-              </div>
-
-              <div class="project-showcase__caption">
-                <div>
-                  <h3 data-showcase-title>{showcaseProjects[0].title}</h3>
-                  <p data-showcase-text>{showcaseProjects[0].text}</p>
-                </div>
-                <span data-showcase-count>01 / {String(showcaseProjects.length).padStart(2, "0")}</span>
-              </div>
-            </div>
-
-            <div class="project-showcase__thumb-row">
-              <button type="button" class="project-showcase__thumb-arrow" aria-label="Previous thumbnails" data-showcase-thumbs-prev>&lsaquo;</button>
-              <div class="project-showcase__thumbs" aria-label="Project thumbnails">
-                {showcaseProjects.map((project, index) => (
-                  <button
-                    type="button"
-                    class:list={[
-                      "project-showcase__thumb",
-                      index === 0 && "is-active"
-                    ]}
-                    aria-label={`View ${project.title}`}
-                    aria-pressed={index === 0 ? "true" : "false"}
-                    hidden={index >= 5}
-                    data-showcase-thumb
-                    data-index={index}
-                    data-image={project.image}
-                    data-alt={project.alt}
-                    data-loc={project.loc}
-                    data-type={project.type}
-                    data-feature={project.feature}
-                    data-title={project.title}
-                    data-text={project.text}
-                    data-label={project.label}
-                  >
-                    <img src={project.image} alt="" loading="lazy" decoding="async" />
-                    <span>{project.label}</span>
-                  </button>
-                ))}
-              </div>
-              <button type="button" class="project-showcase__thumb-arrow" aria-label="Next thumbnails" data-showcase-thumbs-next>&rsaquo;</button>
-            </div>
-            <p class="project-showcase__note">Use the thumbnails to browse project references.</p>
-          </div>
-        </div>
-      </section>
-
       <section class="section client-validation" id="client-validation" aria-labelledby="client-validation-title">
         <div class="container client-validation__inner">
-          <p class="eyebrow client-validation__label">Client Validation</p>
+          <p class="eyebrow client-validation__label">PROJECT REVIEW CHECKLIST</p>
 
           <div class="client-validation__header">
-            <h2 id="client-validation-title">Why Professionals Choose LIKI</h2>
+            <h2 id="client-validation-title">What Project Teams Review Before Specifying LIKI</h2>
             <p>
-              Feedback from builders, architects, and project teams specifying
-              high-performance folding glass wall systems for demanding luxury environments.
+              Before quoting or specifying a large folding glass wall system, LIKI
+              reviews the opening size, project location, performance needs, and
+              system fit to help define the right 140 or 145 configuration.
             </p>
           </div>
 
-          <div class="client-validation__grid">
-            <article class="client-validation__hero-quote">
-              <div>
-                <div class="client-validation__quote-mark" aria-hidden="true">&ldquo;</div>
-                <p class="client-validation__hero-text">
-                  The panel rigidity and corner alignment exceeded our expectations
-                  for a coastal luxury residence.
-                </p>
-              </div>
-              <div class="client-validation__meta">
-                <p class="client-validation__name">Project Director</p>
-                <p class="client-validation__role">Luxury Residential Builder<br />California, USA</p>
-              </div>
+          <div class="client-validation__grid" aria-label="Project review checklist">
+            <article class="client-validation__card">
+              <span>01</span>
+              <h3>Opening & Panel Configuration</h3>
+              <ul>
+                <li>Rough opening width and height</li>
+                <li>Panel count and stacking direction</li>
+                <li>Corner or straight opening requirements</li>
+              </ul>
             </article>
 
-            <div class="client-validation__cards">
-              <article class="client-validation__card">
-                <span>Coastal Villa</span>
-                <p>&ldquo;The opening feels clean, precise, and architecturally quiet.&rdquo;</p>
-                <div class="client-validation__card-meta">
-                  <p class="client-validation__name">Lead Architect</p>
-                  <p class="client-validation__role">Private Residence, Malibu</p>
-                </div>
-              </article>
+            <article class="client-validation__card">
+              <span>02</span>
+              <h3>Project Conditions</h3>
+              <ul>
+                <li>Coastal, wind-exposed, or hospitality environment</li>
+                <li>Thermal and glazing package needs</li>
+                <li>Threshold, drainage, and daily access expectations</li>
+              </ul>
+            </article>
 
-              <article class="client-validation__card">
-                <span>Penthouse</span>
-                <p>&ldquo;The slim aluminum detailing helped us preserve the panoramic view.&rdquo;</p>
-                <div class="client-validation__card-meta">
-                  <p class="client-validation__name">Development Consultant</p>
-                  <p class="client-validation__role">High-Rise Residential, Vancouver</p>
-                </div>
-              </article>
-
-              <article class="client-validation__card">
-                <span>Hospitality</span>
-                <p>&ldquo;Stable operation and a premium hand-feel across repeated daily use.&rdquo;</p>
-                <div class="client-validation__card-meta">
-                  <p class="client-validation__name">Operations Manager</p>
-                  <p class="client-validation__role">Resort Lounge, Miami</p>
-                </div>
-              </article>
-
-              <article class="client-validation__card">
-                <span>Storm Zone</span>
-                <p>&ldquo;The system gave our team confidence on weather exposure and long-term durability.&rdquo;</p>
-                <div class="client-validation__card-meta">
-                  <p class="client-validation__name">Construction Manager</p>
-                  <p class="client-validation__role">Luxury Coastal Project, Sydney</p>
-                </div>
-              </article>
-            </div>
+            <article class="client-validation__card">
+              <span>03</span>
+              <h3>Design & Delivery Support</h3>
+              <ul>
+                <li>Architect / builder coordination</li>
+                <li>Shop drawing and section detail review</li>
+                <li>Production, packaging, and delivery planning</li>
+              </ul>
+            </article>
           </div>
 
-          <div class="client-validation__stats" aria-label="Trust indicators">
-            <div>
-              <strong>Architectural</strong>
-              <span>Project Fit</span>
-            </div>
-            <div>
-              <strong>Minimal</strong>
-              <span>Frame Language</span>
-            </div>
-            <div>
-              <strong>Luxury</strong>
-              <span>Residential Grade</span>
-            </div>
-          </div>
+          <a class="client-validation__cta" href="#quick-inquiry">Send Project Details</a>
         </div>
       </section>
 
@@ -1733,7 +1795,46 @@ const schema = {
           toggle.addEventListener("click", () => {
             setNavState(document.body.dataset.floatingNavOpen !== "true");
           });
+
+          document.addEventListener("floating-nav:close", () => {
+            if (mobileQuery.matches) setNavState(false);
+          });
+
+          window.addEventListener(
+            "scroll",
+            () => {
+              if (
+                mobileQuery.matches &&
+                document.body.dataset.floatingNavOpen === "true"
+              ) {
+                setNavState(false);
+              }
+            },
+            { passive: true }
+          );
+
+          mobileQuery.addEventListener?.("change", () => {
+            setNavState(!mobileQuery.matches);
+          });
         }
+      })();
+
+      (() => {
+        const stickyLinks = document.querySelectorAll(".mobile-sticky-cta a[href^='#']");
+        if (!stickyLinks.length) return;
+
+        stickyLinks.forEach((link) => {
+          link.addEventListener("click", (event) => {
+            if (!window.matchMedia("(max-width: 768px)").matches) return;
+            const hash = link.getAttribute("href");
+            const target = hash ? document.querySelector(hash) : null;
+            if (!target) return;
+
+            event.preventDefault();
+            target.scrollIntoView({ behavior: "smooth", block: "start" });
+            history.pushState(null, "", hash);
+          });
+        });
       })();
 
       (() => {
@@ -1987,6 +2088,7 @@ const schema = {
 
       (() => {
         const triggers = document.querySelectorAll("[data-system-preference]");
+        const quickInquirySection = document.querySelector("#quick-inquiry");
         const quoteSection = document.querySelector("#quote");
         const quoteTitle = document.querySelector("#quote-title");
         const mainForm = quoteSection?.querySelector("[data-inquiry-form]");
@@ -2009,8 +2111,13 @@ const schema = {
         triggers.forEach((trigger) => {
           trigger.addEventListener("click", (event) => {
             event.preventDefault();
+            const targetHash = trigger.getAttribute("href") || "#quote";
+            const targetSection = targetHash === "#quick-inquiry"
+              ? quickInquirySection
+              : quoteSection;
             setPreference(trigger.dataset.systemPreference || "", trigger.dataset.systemFormTitle || "");
-            quoteSection.scrollIntoView({ behavior: "smooth", block: "start" });
+            (targetSection || quoteSection).scrollIntoView({ behavior: "smooth", block: "start" });
+            if (targetSection) history.pushState(null, "", targetHash);
           });
         });
       })();
@@ -2086,6 +2193,10 @@ const schema = {
   :global(body[data-floating-nav-open="false"]) .floating-nav-toggle:hover,
   :global(body[data-floating-nav-open="false"]) .floating-nav-toggle:focus-visible {
     transform: translateY(calc(-50% - 1px));
+  }
+
+  .mobile-sticky-cta {
+    display: none;
   }
 
   .feature-system__inner {
@@ -3345,6 +3456,12 @@ const schema = {
     gap: 8px;
   }
 
+  @media (min-width: 769px) {
+    .project-showcase__nav {
+      right: clamp(96px, 12vw, 180px);
+    }
+  }
+
   .project-showcase__nav button,
   .project-showcase__thumb-arrow {
     display: inline-flex;
@@ -3749,6 +3866,88 @@ const schema = {
     letter-spacing: 0.12em;
     line-height: 1.35;
     text-transform: uppercase;
+  }
+
+  .client-validation__grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 18px;
+  }
+
+  .client-validation__card {
+    display: grid;
+    min-height: auto;
+    align-content: start;
+    gap: 18px;
+    padding: clamp(24px, 2.6vw, 34px);
+  }
+
+  .client-validation__card > span {
+    width: fit-content;
+    margin-bottom: 0;
+  }
+
+  .client-validation__card h3 {
+    margin: 0;
+    color: #f4f0e8;
+    font-family: Georgia, "Times New Roman", serif;
+    font-size: clamp(1.35rem, 2vw, 1.9rem);
+    font-weight: 500;
+    letter-spacing: -0.02em;
+    line-height: 1.05;
+  }
+
+  .client-validation__card ul {
+    display: grid;
+    gap: 11px;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .client-validation__card li {
+    position: relative;
+    padding-left: 18px;
+    color: rgba(244, 240, 232, 0.68);
+    font-size: 0.94rem;
+    line-height: 1.5;
+  }
+
+  .client-validation__card li::before {
+    content: "";
+    position: absolute;
+    left: 0;
+    top: 0.72em;
+    width: 7px;
+    height: 7px;
+    border: 1px solid rgba(183, 154, 107, 0.86);
+    background: rgba(183, 154, 107, 0.22);
+  }
+
+  .client-validation__cta {
+    display: inline-flex;
+    min-height: 54px;
+    align-items: center;
+    justify-content: center;
+    margin-top: 26px;
+    padding: 0 26px;
+    border: 1px solid rgba(183, 154, 107, 0.72);
+    background: var(--bronze);
+    color: #17140e;
+    font-size: 0.78rem;
+    font-weight: 900;
+    letter-spacing: 0.12em;
+    text-decoration: none;
+    text-transform: uppercase;
+    transition:
+      background 180ms ease,
+      transform 180ms ease;
+  }
+
+  .client-validation__cta:hover,
+  .client-validation__cta:focus-visible {
+    background: #d1b17b;
+    outline: none;
+    transform: translateY(-1px);
   }
 
   @keyframes bespokeFadeUp {
@@ -4382,6 +4581,217 @@ const schema = {
     border-top: 1px solid var(--line);
     border-bottom: 1px solid var(--line);
     color: white;
+  }
+
+  .project-fit {
+    padding: clamp(56px, 7vw, 96px) 0;
+    border-top: 1px solid var(--line);
+    border-bottom: 1px solid var(--line);
+    background:
+      linear-gradient(135deg, rgba(17, 19, 18, 0.98), rgba(25, 27, 24, 0.94)),
+      var(--charcoal);
+  }
+
+  .project-fit__inner {
+    display: grid;
+    gap: clamp(22px, 3vw, 34px);
+  }
+
+  .project-fit__intro {
+    max-width: 820px;
+    margin-bottom: 0;
+  }
+
+  .project-fit__intro h2 {
+    color: var(--warm);
+  }
+
+  .project-fit__intro p {
+    max-width: 760px;
+    color: rgba(255, 255, 255, 0.72);
+  }
+
+  .project-fit__grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: clamp(14px, 2vw, 22px);
+  }
+
+  .project-fit__card {
+    padding: clamp(22px, 3vw, 34px);
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    background: rgba(255, 255, 255, 0.055);
+  }
+
+  .project-fit__card h3 {
+    margin: 0;
+    color: var(--warm);
+    font-family: Georgia, "Times New Roman", serif;
+    font-size: clamp(1.35rem, 2vw, 1.8rem);
+    font-weight: 500;
+    line-height: 1.08;
+  }
+
+  .project-fit__card ul {
+    display: grid;
+    gap: 10px;
+    margin: 18px 0 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .project-fit__card li {
+    position: relative;
+    padding-left: 20px;
+    color: rgba(255, 255, 255, 0.72);
+    font-size: 0.96rem;
+    line-height: 1.5;
+  }
+
+  .project-fit__card li::before {
+    content: "";
+    position: absolute;
+    left: 0;
+    top: 0.72em;
+    width: 8px;
+    height: 8px;
+    background: var(--bronze);
+  }
+
+  :global(.project-fit .cta-button) {
+    justify-self: start;
+    width: auto;
+    margin-top: 0;
+  }
+
+  .quick-inquiry {
+    padding: clamp(56px, 7vw, 96px) 0;
+    border-top: 1px solid rgba(180, 147, 101, 0.16);
+    border-bottom: 1px solid rgba(180, 147, 101, 0.16);
+    background:
+      linear-gradient(135deg, rgba(24, 25, 22, 0.98), rgba(17, 19, 18, 0.96)),
+      var(--charcoal);
+    color: #f8f5ed;
+  }
+
+  .quick-inquiry__grid {
+    display: grid;
+    grid-template-columns: minmax(0, 0.82fr) minmax(420px, 1fr);
+    gap: clamp(28px, 5vw, 76px);
+    align-items: start;
+  }
+
+  .quick-inquiry__content {
+    display: grid;
+    gap: 18px;
+    max-width: 560px;
+  }
+
+  .quick-inquiry__content h2 {
+    margin: 0;
+    color: var(--warm);
+    font-size: clamp(2.35rem, 5vw, 4.8rem);
+    line-height: 0.96;
+    overflow-wrap: normal;
+    text-wrap: balance;
+  }
+
+  .quick-inquiry__content p {
+    margin: 0;
+    color: rgba(248, 245, 237, 0.72);
+    font-size: 1.02rem;
+    line-height: 1.7;
+  }
+
+  .quick-inquiry__form {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 16px;
+    padding: clamp(22px, 3vw, 36px);
+    border: 1px solid rgba(180, 147, 101, 0.28);
+    background: rgba(248, 245, 237, 0.06);
+    box-shadow: 0 28px 80px rgba(0, 0, 0, 0.24);
+  }
+
+  .quick-inquiry__field {
+    display: grid;
+    gap: 8px;
+  }
+
+  .quick-inquiry__field:nth-of-type(3),
+  .quick-inquiry__field:nth-of-type(4),
+  .quick-inquiry__form .form-error,
+  .quick-inquiry__submit {
+    grid-column: 1 / -1;
+  }
+
+  .quick-inquiry__field label {
+    color: rgba(248, 245, 237, 0.82);
+    font-size: 0.74rem;
+    font-weight: 900;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+  }
+
+  .quick-inquiry__field input,
+  .quick-inquiry__field textarea {
+    width: 100%;
+    border: 1px solid rgba(248, 245, 237, 0.24);
+    border-radius: 0;
+    background: rgba(8, 9, 8, 0.42);
+    color: #fff;
+    font: inherit;
+    outline: none;
+    transition:
+      border-color 180ms ease,
+      background 180ms ease,
+      box-shadow 180ms ease;
+  }
+
+  .quick-inquiry__field input {
+    min-height: 48px;
+    padding: 0 14px;
+  }
+
+  .quick-inquiry__field textarea {
+    min-height: 120px;
+    padding: 14px;
+    resize: vertical;
+  }
+
+  .quick-inquiry__field input::placeholder,
+  .quick-inquiry__field textarea::placeholder {
+    color: rgba(248, 245, 237, 0.36);
+  }
+
+  .quick-inquiry__field input:focus,
+  .quick-inquiry__field textarea:focus {
+    border-color: rgba(180, 147, 101, 0.86);
+    background: rgba(8, 9, 8, 0.62);
+    box-shadow: 0 0 0 3px rgba(180, 147, 101, 0.16);
+  }
+
+  .quick-inquiry__submit {
+    min-height: 54px;
+    border: 1px solid var(--bronze);
+    background: var(--bronze);
+    color: #17140e;
+    cursor: pointer;
+    font: inherit;
+    font-size: 0.82rem;
+    font-weight: 900;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    transition:
+      background 180ms ease,
+      transform 180ms ease;
+  }
+
+  .quick-inquiry__submit:hover,
+  .quick-inquiry__submit:focus-visible {
+    background: #d1b17b;
+    outline: none;
+    transform: translateY(-1px);
   }
 
   .hook-strip__grid {
@@ -5027,8 +5437,22 @@ const schema = {
   @media (max-width: 860px) {
     .opening-experience__bullets,
     .living-experience__grid,
+    .project-fit__grid,
+    .quick-inquiry__grid,
     .hook-strip__grid,
     .system-comparison__grid {
+      grid-template-columns: 1fr;
+    }
+
+    .quick-inquiry__grid {
+      gap: 24px;
+    }
+
+    .quick-inquiry__content {
+      max-width: 720px;
+    }
+
+    .quick-inquiry__form {
       grid-template-columns: 1fr;
     }
 
@@ -5320,13 +5744,26 @@ const schema = {
   }
 
   @media (max-width: 768px) {
+    :global(body) {
+      padding-bottom: calc(78px + env(safe-area-inset-bottom));
+    }
+
+    :global(astro-dev-toolbar) {
+      display: none !important;
+    }
+
     :global(body[data-floating-nav-open="true"] .floating-nav) {
       display: grid;
       right: 14px;
-      top: 50%;
+      top: 64px;
+      width: min(164px, calc(100vw - 28px));
+      max-height: 50svh;
+      align-content: start;
+      overflow-y: auto;
       opacity: 1;
+      overscroll-behavior: contain;
       pointer-events: auto;
-      transform: translateY(-50%);
+      transform: none;
       visibility: visible;
     }
 
@@ -5343,8 +5780,9 @@ const schema = {
     }
 
     :global(body[data-floating-nav-open="true"]) .floating-nav-toggle {
-      right: 10px;
-      top: calc(50% - 188px);
+      right: 14px;
+      top: 18px;
+      width: 36px;
       min-width: 34px;
       padding: 0;
       font-size: 1rem;
@@ -5360,6 +5798,49 @@ const schema = {
     :global(body[data-floating-nav-open="false"]) .floating-nav-toggle:hover,
     :global(body[data-floating-nav-open="false"]) .floating-nav-toggle:focus-visible {
       transform: translateY(-1px);
+    }
+
+    :global(.whatsapp-button) {
+      display: none;
+    }
+
+    .mobile-sticky-cta {
+      position: fixed;
+      right: 0;
+      bottom: 0;
+      left: 0;
+      z-index: 72;
+      display: grid;
+      grid-template-columns: 1fr 1.24fr 0.82fr;
+      gap: 8px;
+      padding: 10px 10px max(10px, env(safe-area-inset-bottom));
+      background: rgba(17, 19, 18, 0.94);
+      box-shadow: 0 -12px 30px rgba(0, 0, 0, 0.24);
+      backdrop-filter: blur(14px);
+    }
+
+    .mobile-sticky-cta a {
+      display: inline-flex;
+      min-width: 0;
+      min-height: 48px;
+      align-items: center;
+      justify-content: center;
+      padding: 0 8px;
+      border: 1px solid rgba(255, 255, 255, 0.22);
+      color: #fff;
+      font-size: 0.68rem;
+      font-weight: 900;
+      letter-spacing: 0.08em;
+      line-height: 1.18;
+      text-align: center;
+      text-decoration: none;
+      text-transform: uppercase;
+    }
+
+    .mobile-sticky-cta__primary {
+      border-color: var(--bronze) !important;
+      background: var(--bronze);
+      color: #17140e !important;
     }
   }
 
@@ -5750,23 +6231,35 @@ const schema = {
     }
 
     .client-validation__card {
-      min-height: 236px;
-      padding: 24px;
+      min-height: auto;
+      gap: 12px;
+      padding: 20px;
       border-radius: 22px;
+    }
+
+    .client-validation__card h3 {
+      font-size: 1.35rem;
+    }
+
+    .client-validation__card ul {
+      gap: 7px;
+    }
+
+    .client-validation__card li {
+      font-size: 0.88rem;
+      line-height: 1.38;
+    }
+
+    .client-validation__cta {
+      width: 100%;
+      min-height: 50px;
+      margin-top: 18px;
     }
 
     .client-validation__card-meta {
       right: 24px;
       bottom: 22px;
       left: 24px;
-    }
-
-    .client-validation__stats {
-      border-radius: 20px;
-    }
-
-    .client-validation__stats div {
-      padding: 20px;
     }
 
     .bespoke-sizing__grid {
@@ -5892,6 +6385,72 @@ const schema = {
       width: min(100% - 24px, 1480px);
       gap: 14px;
       padding: 18px 0;
+    }
+
+    .project-fit {
+      padding: 48px 0;
+    }
+
+    .project-fit__inner {
+      gap: 18px;
+    }
+
+    .project-fit__card {
+      padding: 22px 18px;
+    }
+
+    .project-fit__card ul {
+      gap: 8px;
+      margin-top: 14px;
+    }
+
+    .project-fit__card li {
+      font-size: 0.92rem;
+    }
+
+    :global(.project-fit .cta-button) {
+      width: 100%;
+    }
+
+    .quick-inquiry {
+      padding: 32px 0 42px;
+    }
+
+    .quick-inquiry__content {
+      gap: 8px;
+    }
+
+    .quick-inquiry__content h2 {
+      font-size: 1.86rem;
+      line-height: 1.06;
+    }
+
+    .quick-inquiry__content p {
+      font-size: 0.9rem;
+      line-height: 1.44;
+    }
+
+    .quick-inquiry__form {
+      gap: 9px;
+      padding: 16px;
+    }
+
+    .quick-inquiry__field {
+      gap: 6px;
+    }
+
+    .quick-inquiry__field input {
+      min-height: 44px;
+      padding: 0 12px;
+    }
+
+    .quick-inquiry__field textarea {
+      min-height: 72px;
+      padding: 12px;
+    }
+
+    .quick-inquiry__submit {
+      min-height: 50px;
     }
 
     .hook-card {

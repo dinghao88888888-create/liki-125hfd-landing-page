@@ -146,6 +146,9 @@
 
         const errorBox = form.querySelector("[data-inquiry-error]");
         const submitButton = form.querySelector("[data-submit-button]");
+        if (submitButton && !submitButton.dataset.originalText) {
+          submitButton.dataset.originalText = submitButton.textContent.trim();
+        }
         const fileInput = form.querySelector("[data-file-input]");
         const files = fileInput ? [...fileInput.files] : [];
         const fields = collectFields(form);
@@ -183,7 +186,7 @@
         } finally {
           current.isSubmitting = false;
           setDisabled(form, false);
-          setText(submitButton, "Request Project Quote");
+          setText(submitButton, submitButton?.dataset.originalText || "Request Project Quote");
         }
       });
     });

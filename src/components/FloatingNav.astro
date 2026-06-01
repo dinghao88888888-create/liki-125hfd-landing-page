@@ -1,11 +1,12 @@
 ---
 const defaultNavItems = [
-  ["Why LIKI", "#open-living"],
+  ["Fit Check", "#fit"],
   ["140 vs 145", "#systems"],
+  ["Projects", "#projects"],
+  ["Send Details", "#quick-inquiry"],
   ["Key Features", "#features"],
   ["Engineering", "#engineering"],
   ["Process", "#process"],
-  ["Projects", "#projects"],
   ["Quote", "#quote"]
 ];
 
@@ -82,6 +83,9 @@ const { items = defaultNavItems } = Astro.props;
         link.addEventListener("click", () => {
           const href = link.getAttribute("href");
           if (href) setCurrent(href);
+          if (window.matchMedia("(max-width: 768px)").matches) {
+            document.dispatchEvent(new CustomEvent("floating-nav:close"));
+          }
         });
       });
 

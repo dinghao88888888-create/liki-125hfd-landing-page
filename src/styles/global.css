@@ -1142,6 +1142,11 @@ details p {
     display: none;
   }
 
+  .hero h1 {
+    font-size: clamp(2.35rem, 10vw, 3.2rem);
+    line-height: 1;
+  }
+
   .popup-inquiry {
     align-items: end;
     padding: 16px 12px calc(16px + env(safe-area-inset-bottom));

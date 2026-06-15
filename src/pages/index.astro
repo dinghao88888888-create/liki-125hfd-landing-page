@@ -427,6 +427,22 @@ const schema = {
     <meta name="twitter:description" content={description} />
     <meta name="twitter:image" content={heroImageUrl} />
     <GoogleAnalytics />
+    <script is:inline>
+      window.addEventListener('load', function () {
+        document.addEventListener('click', function (e) {
+          var dom = e.target.closest('[type="submit"]');
+          if (dom === null) return;
+          var form = dom.closest('form');
+          var done = form.checkValidity();
+          var email = form.querySelector('[type="email"]').value;
+
+          if (done == true && email != "") {
+            gtag('set', 'user_data', { "email": email });
+            gtag('event', 'Inquiry_Form_Submission', { 'send_to': 'G-VTK5YEKDW9' });
+          }
+        });
+      })
+    </script>
     <MicrosoftClarity />
     <script type="application/ld+json" set:html={JSON.stringify(schema)}></script>
   </head>
